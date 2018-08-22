@@ -1,0 +1,109 @@
+<md-dialog aria-label="" style="margin-left: 20%;">
+    <form ng-cloak="">
+
+        <md-dialog-content style="padding: 10px 5px">
+
+            <div  layout="column" style="width: 1200px;">
+
+                <md-toolbar class="md-hue-2" style="background-color:#337ab7">
+                    <div class="md-toolbar-tools">
+
+
+                        <h2 flex="" md-truncate="" >Student Details </h2>
+
+                        <md-button class="md-icon-button" aria-label="More">
+                            <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+
+                <md-content style="padding: 0% 2%">
+                    
+                    <span style="width: 50%;float: right">
+                        <h4><b>STUDENT SUBJECTS</b></h4>
+                        <hr/>
+                        
+                        <table border="0" style="width: 100%">
+                            <tr style="height: 30px;border-bottom: lightblue;">
+                                <td style="width: 5%"><label>No.</label></td>
+                                <td style="width: 35%"><label>Subject Code</label></td>
+                                <td style="width: 44%"><label>Subject Code</label></td>
+                            </tr>
+                            <tr ng-repeat="subject in reportData.studentSubjects">
+                                <td style="width: 5%">{{$index + 1}}</td>
+                                <td style="width: 35%">{{subject.subjectCode}}</td>
+                                <td style="width: 44%"> : {{subject.subjectDesc}}</td>
+                            </tr>
+                        </table>
+                    </span>
+                    <div style="width: 49%;border-right: 1px solid lightgray">
+                        <span >
+                            <h4><b>STUDENT DETAILS</b></h4>
+                        <hr/>
+                    </span>
+                        <table border="0" style="width: 100%">
+                            <tr>
+                                <td style="width: 45%">STUDENT SYSTEM ID</td>
+                                <td> : {{reportData.id}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT NO</td>
+                                <td> : {{reportData.studentNumber}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT ID NUMBER</td>
+                                <td> : {{reportData.idNumber}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT LASTNAME</td>
+                                <td> : {{reportData.lastname}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT FIRSTNAME</td>
+                                <td> : {{reportData.firstname}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT GENDER</td>
+                                <td> : {{reportData.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT COURSE CODE</td>
+                                <td> : {{reportData.courseCode}}</td>
+                            </tr>
+                        </table>
+
+                        <hr/>
+                        <h4><b>STUDENT CONTACT DETAILS</b></h4>
+                        <hr/>
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width: 45%">STUDENT CELLPHONE NUMBER</td>
+                                <td> : {{reportData.cellnumber}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT EMAIL ADDRESS</td>
+                                <td> : {{reportData.email}}</td>
+                            </tr>
+                            <tr>
+                                <td>STUDENT HOME ADDRESS</td>
+                                <td> : {{reportData.address}}</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+
+                </md-content>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" >
+            <span flex=""></span>
+            <md-button class="md-raised md-primary" ng-click="cancel()" md-autofocus="">
+                Dismiss
+            </md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

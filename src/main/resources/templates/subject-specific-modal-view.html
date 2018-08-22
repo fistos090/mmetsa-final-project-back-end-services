@@ -1,0 +1,80 @@
+<md-dialog aria-label="" style="margin-left: 21%;">
+    <form ng-cloak="">
+
+
+        <md-dialog-content style="max-width:1000px;max-height:1000px; ">
+            <div class="md-dialog-content">
+                <table border="0">
+
+                    <tr>
+                        <td><div class="col-md-4">Report name </div><div class="col-md-6">: {{reportData.reportName}}</div></td>
+                        <td style="border-left: solid 1px lightgray"><div class="col-md-3">Report date </div><div class="col-md-6">: {{reportData.todaysDate}}</div></td>
+                    </tr>
+                </table >
+                <hr/>
+                <table border="0">
+                    <tr>
+                        <td><div class="col-md-4">Subject code</div><div>: {{reportData.subject.subjectCode}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-4">Subject description</div><div>: {{reportData.subject.subjectDesc}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-4">Course code</div><div>: {{reportData.course.courseCode}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-4">Course description</div><div>: {{reportData.course.courseDescription}}</div></td>
+                    </tr>
+
+                </table>
+                <hr/>
+                <h3>Subject register(s) records</h3>
+                <hr/>
+                <ul style="list-style-type: none;padding: 5px 0px" ng-if="reportData.subjectRecords.length !== 0">
+
+                    <li>
+                        <span class="col-md-4">Attendance register id</span>
+                        <span class="col-md-4">Attendance date</span>
+                        <span class="col-md-4">Attendance register status</span>
+                    </li>
+                    <hr/>
+                    <li style="padding: 10px 0px" ng-repeat="record in reportData.subjectRecords">
+                        
+                        <span class="col-md-4"> >> {{record.attendanceSheet.id}}</span>
+                        <span class="col-md-4">{{record.attendanceSheet.sheetDate}}</span>
+                        <span class="col-md-4">{{record.attendanceSheet.status}}</span>
+                        
+                        <ul style="list-style-type: none;margin: 3%;">
+                            <li>
+                                <span class="col-md-6"><h4>Student number</h4></span>
+                                <span class="col-md-6"><h4>Attendance status</h4></span>
+                            </li>
+                            <li ng-repeat="student in record.sheetStudents">
+                                <span class="col-md-6">{{student.studentNo}}</span>
+                                <span class="col-md-6">{{student.status}}</span>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+                <div  ng-if="reportData.subjectRecords.length === 0">
+                    <h3 style="text-align: center;">No records found</h3>
+                </div>
+
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" >
+            <md-button ng-disabled="reportData.subjectRecords.length === 0" class="md-raised md-primary" ng-click="printReport(reportData, '/TUT/lecturer/printReport/specificDate')" md-autofocus="">
+                Print Report
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="cancel()" md-autofocus="">
+                Cancel
+            </md-button>
+            <span flex=""></span>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

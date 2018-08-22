@@ -1,0 +1,253 @@
+
+
+
+
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>yes</title>
+    </head>
+    <body>
+        <div class="nav-pic">
+            <div class="top-nav ">
+                <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                <div class="list-right">
+                    <ul>
+                        <li><b id="sysTime"></b></li>
+                    </ul>
+                    <ul >
+
+                        <li style="width: 30%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                            <i class="logout"></i>Logout
+                        </li>
+                        <li style="width: 50%;" ng-if="userName === null">
+
+                        </li>
+                        <li><a ></a></li>
+
+                    </ul><br/>
+
+                </div>
+            </div>
+        </div>
+        <div class="side-nav">
+
+            <div class="header">
+                <center><b>TUT ATTENDANCE SYSTEM</b></center>
+            </div>
+            <div class="testing">
+                <div class="item " ng-click="goto('/lecturerHome')">My home<i class="home-icon"></i></div>
+                <div class="item " ng-click="goto('/activateReg')"><i class="activate-reg"></i>Activate register</div>
+                <div class="item active" ng-click="goto('/lecturerReports')"><i class="my-subjects"></i>View Reports</div>
+                <div class="item" ng-click="goto('/profile')"><i class="profile"></i>My Profile</div>
+            </div>         
+        </div>
+
+        <div class="active-home">
+
+
+            <div class="current-reg">
+                <h3>Reports </h3><br/>
+                <div class="alert alert-danger" ng-if="formValidationMessage"> 
+                    <a ng-click="closeAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <h4><strong>Important!</strong> {{formValidationMessage}}.</h4>
+                </div>
+                <hr/>
+                <div class="reports-area">
+                    <div class="col-md-4" ng-init="reportActive = 'Student report'" >
+                        <h3>Choose Report Type :</h3>
+                        <md-radio-group ng-model="reportActive">
+
+                            <md-radio-button value="Student report" class="md-primary">Student report</md-radio-button>
+                            <md-radio-button ng-click="subType('SDR')" value="Subject report"> Subject report</md-radio-button>
+                        </md-radio-group>
+                        <ul ng-if="reportActive === 'Subject report'">
+                            <li>
+                            <md-radio-group ng-model="subReportType">
+
+                                <md-radio-button value="SDR" ng-click="subType('SDR')" class="md-primary">Specific date report</md-radio-button>
+                                <md-radio-button value="DRR" ng-click="subType('DRR')" class="md-primary">Date range report</md-radio-button>
+
+                            </md-radio-group>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                    <div class="col-md-8"  ng-if="reportActive === 'Student report'" style="border-left: solid lightgray thin">
+                        <h3>Student Report :</h3>
+                        <hr/>
+                        <div>
+                            <form name="dailyReport">
+                                <h4>Date range Report 
+                                    <span style="float: right">
+                                        <label  ng-init="studReport.name = 'Placeholder  name'">Report name: </label> {{studReport.name}}
+                                    </span>
+                                </h4>
+                                <hr/>
+                                <table>
+                                    <tr>
+                                        <td colspan="2" class="col-md-8">
+                                            <div style="float: left">
+                                                <label>Start date:</label>
+                                                <md-datepicker ng-change="removeMessage()" ng-model = "studReport.startDate" md-placeholder = "Start date" style="min-width:500px">
+
+                                                </md-datepicker>
+                                            </div>
+                                            <div style="float: right">
+                                                <label>End date:</label>
+                                                <md-datepicker  ng-change="removeMessage()" ng-model = "studReport.endDate" md-placeholder = "End date" style="min-width:500px">
+
+                                                </md-datepicker>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-4"><label>Subject code</label></td>
+                                        <td class="col-md-8">
+                                            <div>
+                                                <md-select  ng-change="removeMessage()" placeholder="Select subject code" ng-model="studReport.subjectCode" md-on-open="loadUsers()" >
+                                                    <md-option ng-value="sub.subjectCode" ng-click="getSubjectStudents(sub.subjectCode)" ng-repeat="sub in subjects">{{sub.subjectCode}}</md-option>
+                                                </md-select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr >
+                                        <td class="col-md-4"><label>Student number</label></td>
+                                        <td class="col-md-8">
+                                            <div >
+                                                <md-select ng-change="removeMessage()" placeholder="Select student number" ng-disabled="!studentsNumbers" ng-model="studReport.studentNumber"  >
+                                                    <md-option ng-value="studentNumber" ng-repeat="studentNumber in studentsNumbers">{{studentNumber}}</md-option>
+                                                </md-select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--md-on-open="loadUsers()"-->
+                                    <tr>
+                                        <td class="col-md-3"></td>
+                                        <td class="col-md-8">
+                                            <div style="float: right">
+                                                <md-button ng-disabled="myForm.$invalid" ng-click="generateStudentRangeReport(studReport)" class="md-raised md-primary">View report</md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-8"  ng-if="reportActive === 'Subject report'" style="border-left: solid lightgray thin">
+                        <h3>Subject Report :</h3>
+                        <hr/>
+
+                        <div ng-if="subReportType === 'SDR'">
+                            <form name="subSpecificReport">
+                                <h4>Specific date Report 
+                                    <span style="float: right">
+                                        <label  ng-init="subSpecificReport.name = 'Placeholder  name'">Report name: </label> {{subSpecificReport.name}}
+                                    </span>
+                                </h4>
+                                <hr/>
+                                <table>
+                                    <tr>
+                                        <td colspan="2" class="col-md-8">
+                                            <div style="float: right">
+                                                <label>Select date:</label>
+                                                <md-datepicker ng-change="removeMessage()" ng-model = "subSpecificReport.reportDate" md-placeholder = "Report date" style="min-width:500px">
+
+                                                </md-datepicker>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-4"><label>Subject code</label></td>
+                                        <td class="col-md-8">
+                                            <div style="width: 100%">
+                                                <md-select ng-change="removeMessage()" placeholder="Select subject code" ng-model="subSpecificReport.subjectCode" md-on-open="loadUsers()" >
+                                                    <md-option ng-value="sub.subjectCode" ng-click="getStudents(sub.subjectCode)" ng-repeat="sub in subjects">{{sub.subjectCode}}</md-option>
+                                                </md-select>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-3"></td>
+                                        <td class="col-md-8">
+                                            <div style="float: right">
+                                                <md-button ng-disabled="myForm.$invalid" ng-click="subjectSpecificDate(subSpecificReport)" class="md-raised md-primary">View report</md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </form>
+                        </div>
+
+                        <div ng-if="subReportType === 'DRR'">
+                            <form name="subRangeReport">
+                                <h4>Date range report 
+                                    <span style="float: right">
+                                        <label  ng-init="report.name = 'Placeholder  name'">Report name: </label> {{report.name}}
+                                    </span>
+                                </h4>
+                                <hr/>
+                                <table>
+                                    <tr>
+                                        <td colspan="2" class="col-md-8">
+                                            <div  style="float: left">
+                                                <label>Start date :</label>
+                                                <md-datepicker ng-change="removeMessage()" ng-model = "report.startDate" md-placeholder = "Start date" style="min-width:500px">
+
+                                                </md-datepicker>
+                                            </div>
+                                            <div  style="float: right">
+                                                <label>end date: </label>
+                                                <md-datepicker ng-change="removeMessage()" ng-model = "report.endDate" md-placeholder = "Start date" style="min-width:500px">
+
+                                                </md-datepicker>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-4"><label>Subject code</label></td>
+                                        <td class="col-md-8">
+                                            <div >
+                                                <md-select ng-change="removeMessage()" placeholder="Select subject code" ng-model="report.subjectCode" md-on-open="loadUsers()" >
+                                                    <md-option ng-value="sub.subjectCode" ng-click="getStudents(sub.subjectCode)" ng-repeat="sub in subjects">{{sub.subjectCode}}</md-option>
+                                                </md-select>
+                                            </div>
+                                        </td>
+                                    </tr>                                  
+                                    <tr>
+                                        <td class="col-md-3"></td>
+                                        <td class="col-md-8">
+                                            <div style="float: right">
+                                                <md-button ng-disabled="myForm.$invalid" ng-click="generateRangeReport(report)" class="md-raised md-primary">View report</md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</html>

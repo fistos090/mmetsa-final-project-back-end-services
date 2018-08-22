@@ -1,0 +1,83 @@
+<md-dialog aria-label="" style="margin-left: 21%;">
+    <form ng-cloak="">
+
+
+        <md-dialog-content style="max-width:1400px;max-height:700px;">
+            <div class="md-dialog-content">
+                <table border="0">
+
+                    <tr>
+                        <td><div class="col-md-4">Report name </div><div class="col-md-6">: {{reportData.reportName}}</div></td>
+                        <td style="border-left: solid 1px lightgray"><div class="col-md-3">Report date </div><div class="col-md-6">: {{reportData.reportDate}}</div></td>
+                    </tr>
+                </table >
+                <hr/>
+                <table border="0">
+                    <tr>
+                        <td ><div class="col-md-5">Report owner name </div><div></div>: {{reportData.owner.surname}} {{reportData.owner.name}}</td>
+                    </tr>
+                    <tr>
+                        <td ><div class="col-md-5">Report owner number</div><div>: {{reportData.owner.userNumber}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-5">Report owner role</div><div>: {{reportData.owner.usrRole}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-5">Report owner email</div><div>: {{reportData.owner.email}}</div></td>
+                    </tr>
+
+
+                </table>
+                <hr/>
+                
+                <table border="0" ng-if="reportData.records.length !== 0">
+                    <thead>
+                        <tr style="border-bottom: solid 1px lightgray;padding: 10px 0px">
+                            <th>Record #</th>
+                            <th>USER NUMBER</th>
+                            <th>USER ROLE</th>
+                            <th>LOGIN DATE 'N TIME</th>
+                            <th>LOGOUT DATE 'N TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5"> </td> 
+                        </tr>
+                        <tr>
+                            <td colspan="5"><label><h4>User Records :</h4></label></td> 
+                        </tr>
+                        <tr style="border-bottom: solid 1px lightgray;padding: 10px 0px">
+                            <td colspan="5"> </td> 
+                        </tr>
+                        <tr style="height: 20px" ng-repeat="record in reportData.records">
+                            <td>{{$index + 1}}</td>
+                            <td>{{record.userNumber}}</td>
+                            <td>{{record.userRole}}</td>
+                            <td>{{record.loginDate}} {{record.loginTime}}</td>
+                            <td >{{record.logoutDate ||'No date'}} {{record.logoutTime||"No time"}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <div  ng-if="reportData.records.length === 0">
+                    <h3 style="text-align: center;">No records found</h3>
+                </div>
+
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" >
+            <md-button ng-disabled="reportData.records.length === 0" class="md-raised md-primary" ng-click="printReport(reportData, '/ADMIN/admin/printReport/')" md-autofocus="">
+                Print Report
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="cancel()" md-autofocus="">
+                Cancel
+            </md-button>
+            <span flex=""></span>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

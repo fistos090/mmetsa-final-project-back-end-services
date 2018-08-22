@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link rel="stylesheet" type="text/css" href="css/loginPG_style.css"/>
+    </head>
+    <body >
+        <div> </div>
+        
+        <div class="container body-bck" style="">
+
+            <div class="login-form-area">
+                
+                <div class="login-header">
+                    <label>Login</label><p ><b id="sysTime"></b></p>
+                    <hr/>
+                </div>
+                <div class="login-body">
+
+                    <form >
+                        <label>Staff Number :</label>
+                        <input type="number" ng-model="user.userNumber" ng-style="studNumberStyle" required="" ng-change="changeStudNumberStyle()" class="form-control fInput" placeholder="Enter Staff Number"/>
+                        <label>Staff Password :</label>
+                        <input type="password" ng-model="user.password" ng-style="passStyle" ng-change="changePassStyle()" class="form-control fInput" placeholder="Enter Staff Password"/>
+                        <br/>
+                        <span>Staff Type |</span>&nbsp;
+
+                        <input  type="radio" name="staffType" checked=""  ng-checked="adm" ng-click="userType(user, 'ADMIN')" />&nbsp;Admin&nbsp;&nbsp;
+                        <input type="radio" name="staffType"  ng-checked="lec" ng-click="userType(user, 'LECTURER')"  />&nbsp;Lecturer
+
+                        <span style="float: right;cursor: pointer"><a ng-click="retrievePassword()" >forgot Password?</a></span>
+                        <br/><br/>
+                        <button ng-click="login(user)" class="login-btn">
+                            Login
+                        </button>
+                        <button style="float: right" ng-click="reset(user)" class="login-btn">
+                            Reset
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+</html>

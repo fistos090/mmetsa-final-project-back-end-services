@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--169.254.139.184-->
+        <title>TUT</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    </head>
+    <body  >
+        <div class=" " style="background-color: #f9f9f9;">
+
+            <div class="nav-pic">
+                <div class="top-nav ">
+                    <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                    <div class="list-right">
+                        <ul>
+                            <li><b id="sysTime"></b></li>
+                        </ul>
+                        <ul >
+
+                            <li style="width: 50%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                                Logout
+                            </li>
+                            <li style="width: 50%;" ng-if="userName === null">
+
+                            </li>
+                            <li><a ></a></li>
+
+                        </ul><br/>
+
+                    </div>
+                </div>
+            </div>
+            <div class="side-nav">
+
+                <div class="header">
+                    <center><b>TUT ATTENDANCE SYSTEM</b></center>
+                </div>
+                <div class="testing">
+                    <div class="item " ng-click="goto('/index')">Home<i class="home-icon"></i></div>
+                    <div class="item" ng-click="goto('/addNewCourse')"><i class="add-icon"></i>New course</div>
+                    <div class="item" ng-if="courses.length !== 0" ng-click="goto('/addNewSubject')"><i class="add-icon"></i>New subject</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/RegisterStudent')"><i class="someone-new-icon"></i>Add student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="view-list-icon"></i>View students</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="delete-someone-icon "></i>Remove student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/registerLecturer')" ><i class="someone-new-icon"></i>Add lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="view-list-icon"></i>View lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="delete-someone-icon"></i>Remove lecturer</div>
+                    <div class="item active" ng-if="subjects.length !== 0" ng-click="goto('/adminReports')"><i class="my-subjects"></i>View Reports</div>
+
+                </div>
+               
+
+            </div>
+
+
+            <div class="active-home">
+
+
+                <div class="current-reg">
+                    <div class="login-header">
+                        <h1>Users login Report</h1><p ><b id="sysTime"></b></p>
+                        <hr/>
+                    </div>
+                    <div class="login-body">
+                        <h4><b>Select user type:</b></h4>
+                        <form ng-submit="adminRegister(admin)">
+                            <div>
+                                <md-select ng-init="reportData.userType = 'ALL'" placeholder="Select user type" ng-model="reportData.userType"  >
+                                    <md-option value="ALL" >ALL</md-option>
+                                    <md-option value="ADMIN" >ADMIN</md-option>
+                                    <md-option value="LECTURER" >LECTURER</md-option>
+                                </md-select>
+                            </div>
+                            <div style="float: right">
+                                <md-button ng-disabled="myForm.$invalid" ng-click="adminGenerateReport(reportData)" class="md-raised md-primary">View report</md-button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </body>
+
+
+</html>

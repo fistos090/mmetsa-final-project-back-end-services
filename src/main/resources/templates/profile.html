@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>yes</title>
+
+    </head>
+    <body >
+        <div class="nav-pic">
+            <div class="top-nav ">
+                <i class="auth-user"></i><span ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                <div class="list-right">
+                    <ul>
+                        <li><b id="sysTime"></b></li>
+                    </ul>
+                    <ul >
+
+                        <li style="width: 30%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                            <i class="logout"></i>Logout
+                        </li>
+                        <li style="width: 50%;" ng-if="userName === null">
+
+                        </li>
+                        <li><a ></a></li>
+
+                    </ul><br/>
+
+                </div>
+            </div>
+        </div>
+        <div class="side-nav">
+
+            <div class="header">
+                <center><b>TUT ATTENDANCE SYSTEM</b></center>
+            </div>
+            <div class="testing">
+                <div class="item " ng-click="goto('/lecturerHome')">My home<i class="home-icon"></i></div>
+                <div class="item" ng-click="goto('/activateReg')"><i class="activate-reg"></i>Activate register</div>
+                <div class="item" ng-click="goto('/lecturerReports')"><i class="my-subjects"></i>View Reports</div>
+                <div class="item active" ng-click="goto('/profile')"><i class="profile"></i>My Profile</div>
+
+            </div>
+
+        </div>
+        <div class="lec-home">
+
+            <div class="current-reg">
+                <h3>My Profile</h3>
+                <div class="current-reg" style="width: 100%;">
+                    <h3><u>Details</u></h3><br/>
+                    <label>LECTURER NUMBER :</label><br/> {{lecturerPro.userNumber}}<br/>
+                    <label>LECTURER LASTNAME :</label><br/> {{lecturerPro.surname}}<br/>
+                    <label>LECTURER FIRSTNAME :</label><br/> {{lecturerPro.name}}<br/>
+                    <label>LECTURER EMAIL :</label><br/> {{lecturerPro.email}}<br/>
+                    
+                </div>
+            </div>
+
+            <div class="previous-reg">
+                <h3>Change Password</h3><br/>
+                <hr/>
+                <md-content layout-padding="row">
+                    <form name="changePassword">
+
+                        <div >
+                            <md-input-container style="width: 100%;font-size: 20px">
+                                <label>Old Password</label>
+                                <input required="" type="password"  name="oldPassword" ng-init="newInfo.oldPassword = lecturerPro.password" ng-value="lecturerPro.password" ng-model="newInfo.oldPassword"/>
+                                <div ng-messages="changePassword.oldPassword.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container><br/>
+                            <md-input-container style="width: 100%;font-size: 20px">
+                                <label>New Password</label>
+                                <input required="" type="password" name="newPassword" ng-model="newInfo.newPassword"/>
+                                <div ng-messages="changePassword.newPassword.$error">
+                                    <div ng-message="required">
+                                        This is required.
+                                    </div>
+                                </div>
+                            </md-input-container><br/>
+                            <md-input-container style="width: 100%;font-size: 20px">
+                                <label>Confirm Password</label>
+                                <input required="" type="password" name="newRePassword" ng-model="newInfo.newRePassword"/>
+                                <div ng-messages="changePassword.newRePassword.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        
+                        <div style="float: right">
+                            <md-button ng-disabled="changePassword.$invalid" ng-click="change(newInfo,lecturerPro)" class="md-raised md-primary" type="submit">Change Password</md-button>
+                        </div>
+                    </form>
+                </md-content>
+            </div>
+
+        </div>
+
+    </body>
+</html>

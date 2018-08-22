@@ -1,0 +1,158 @@
+<html>
+    <head>
+        <title>TTT</title>
+        <!-- CSS library  [Bootstrap] -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+
+        <!-- w3 CSS library  [w3] -->
+        <link rel="stylesheet" type="text/css" href="css/w3.css"/>
+        <!-- Site styles -->
+        <link rel="stylesheet" type="text/css" href="css/site_styles.css"/>
+
+        <!-- JavaScript libraries [Angular] -->
+        <script src="js/angular.js" ></script>
+        <script src="js/angular-route.js" ></script>
+        <script src="js/angular-route.min.js" ></script>
+
+        <!--  -->
+        <script src="js/SiteRouteProvider.js" ></script>
+        <script src="js/controller.js" ></script>
+
+    </head>
+    <body ng-if="loginID !== null" >
+        <div class="nav-pic">
+            <div class="top-nav ">
+                <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                <div class="list-right">
+                    <ul>
+                        <li><b id="sysTime"></b></li>
+                    </ul>
+                    <ul >
+
+                        <li style="width: 50%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                            Logout
+                        </li>
+                        <li style="width: 50%;" ng-if="userName === null">
+
+                        </li>
+                        <li><a ></a></li>
+
+                    </ul><br/>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="side-nav">
+            <div class="header">
+                <center><b>TUT ATTENDANCE SYSTEM</b></center>
+            </div>
+            <div class="testing">
+                    <div class="item " ng-click="goto('/index')">Home<i class="home-icon"></i></div>
+                    <div class="item" ng-click="goto('/addNewCourse')"><i class="add-icon"></i>New course</div>
+                    <div class="item active" ng-if="courses.length !== 0" ng-click="goto('/addNewSubject')"><i class="add-icon"></i>New subject</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/RegisterStudent')"><i class="someone-new-icon"></i>Add student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="view-list-icon"></i>View students</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="delete-someone-icon "></i>Remove student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/registerLecturer')" ><i class="someone-new-icon"></i>Add lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="view-list-icon"></i>View lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="delete-someone-icon"></i>Remove lecturer</div>
+              <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/adminReports')"><i class="my-subjects"></i>View Reports</div>
+                
+            </div>
+            <div class="input-group search-input" style="float: end">
+                <input placeholder="Search by student number" ng-model="query" ng-keyup="search(attendingStudents, query)" type="text" class="form-control " aria-describedby="search-query"/>
+                <span class="input-group-addon" id="search-query"><span class="glyphicon glyphicon-search"></span></span>
+            </div>
+        </div>
+    <center>
+        <div class="active-home">
+            <div class="current-reg">
+                <div class="alert alert-success" ng-if="successAlert">
+                    <a ng-click="closeAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong> {{message}}
+                </div>
+                <!--<div class="alert alert-warning">
+                    <strong>Warning!</strong> {{message}}
+                </div>-->
+                <div class="alert alert-danger" ng-if="failureAlert"> 
+                    <a ng-click="closeAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Danger!</strong> {{message}}.
+                </div>
+
+                <h1>New Subject Information</h1>
+                <hr/>
+                <form ng-submit="addNewSubject(subject)">
+
+                    <table style="min-height: 300px;" class="tableStyles">
+                        <tr >
+                            <td >
+                                <label>Subject Code :</label>
+                            </td>
+                            <td >
+                                <input ng-style="studNumberStyle" placeholder="Enter new subject code" required="" ng-model="subject.subjectCode" ng-change="changeStudNumberStyle()" type="text" class="form-control fInput" />
+                            </td>
+                        </tr>
+                        <tr >
+                            <td >
+                                <label>Subject Description :</label>
+                            </td>
+                            <td >
+                                <input ng-model="subject.subjectDesc" placeholder="Enter new subject description" required="" ng-style="passStyle" ng-change="insertEmail(student);changePassStyle()" type="text" class="form-control fInput" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                <label>Course Code</label>
+                            </td>
+                            <td>
+                                <select ng-change="sortByCourseCode(subject.courseCode)" ng-model="subject.courseCode" class="form-control" >
+                                    <option>-- Select course code --</option>
+                                    <option ng-repeat="course in courses" >{{course.courseCode}}&nbsp;|&nbsp;{{course.courseDescription}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colspan="2">
+                                <button style="width: 100%" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                    ADD NEW SUBJECT
+                                </button>
+                            </td>
+
+                        </tr>
+                    </table>
+
+
+                </form>
+
+
+            </div>
+        </div>
+        <br/>
+
+    </center>
+    <div class="container-fluid page-body" >
+        <div class="footer ">
+            <div class="left">
+                <a href="#">Home</a>
+                <span>|</span>
+                <a href="#">Support</a>
+
+                <span>|</span>
+                <a href="#">Contact</a>
+
+                <div class="right">
+                    &copy; 2017 TUT Web Attendance Register.
+                    Design by <a href="#" target="_blank" title="TUT attendence register">GROUP J</a>
+                </div> 
+
+            </div>
+        </div>
+
+    </div>
+    <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script> 
+</body>
+</html>

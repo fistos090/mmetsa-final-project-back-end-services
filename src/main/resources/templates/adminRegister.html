@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+           <div class="container">
+            
+          
+        
+        <div style="width: 60%;margin: auto;margin-top: 6%;box-shadow: 1px 1px 10px;background-color: white;padding: 2%;border-radius:1%;">
+
+            <div class="login-form-area">
+                
+                <div class="login-header">
+                    <h1>Administrator Registration</h1><p ><b id="sysTime"></b></p>
+                    <hr/>
+                </div>
+                <div class="login-body">
+
+                    <form ng-submit="adminRegister(admin)">
+                        <label>Staff Number :</label>
+                        <input type="text" ng-model="admin.userNumber" ng-style="studNumberStyle" required="" ng-change="changeStudNumberStyle()" class="form-control fInput" placeholder="Enter admin number"/>
+                        <label>Lastname :</label>
+                        <input type="text" ng-model="admin.surname" ng-style="surnameStyle" required="" ng-change="changeStyle()" class="form-control fInput" placeholder="Enter admn surname"/>
+                        <label>Name :</label>
+                        <input type="text" ng-model="admin.name" ng-style="nameStyle" required="" ng-change="changeStyle()" class="form-control fInput" placeholder="Enter admin name"/>
+                        <label>Admin email :</label>
+                        <input type="email" ng-model="admin.email" ng-style="emailStyle" required="" ng-change="changeStyle()" class="form-control fInput" placeholder="Enter admin email"/>
+                        <label>Password :</label>
+                        <input type="password" ng-model="admin.password" ng-style="passStyle" required="" ng-change="changePassStyle()" class="form-control fInput" placeholder="Enter admin password"/>
+                        <label>Confirm Password: </label>
+                        <input type="password" ng-model="admin.rePassword" ng-style="passStyle" required="" ng-change="changePassStyle()" class="form-control fInput" placeholder="Enter admin password"/>
+                        
+                        <label>SYSTEM SECURITY KEY (SSK): </label>
+                        <input type="password" ng-model="admin.ssKey" required="" class="form-control fInput" placeholder="System Security Key (SSK)"/>
+                        
+                        
+                      <br/>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+             </div>
+
+        </div>
+       
+    </body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TTT</title>
+
+    </head>
+    <body >
+        <div class=" " style="background-color: #f9f9f9;">
+            <div class="nav-pic">
+                <div class="top-nav ">
+                    <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                    <div class="list-right">
+                        <ul>
+                            <li><b id="sysTime"></b></li>
+                        </ul>
+                        <ul >
+
+                            <li style="width: 50%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                                Logout
+                            </li>
+                            <li style="width: 50%;" ng-if="userName === null">
+
+                            </li>
+                            <li><a ></a></li>
+
+                        </ul><br/>
+
+                    </div>
+                </div>
+            </div>
+            <div class="side-nav">
+                <div class="header">
+                    <center><b>TUT ATTENDANCE SYSTEM</b></center>
+                </div>
+                <div class="testing">
+                    <div class="item " ng-click="goto('/index')">Home<i class="home-icon"></i></div>
+                    <div class="item" ng-click="goto('/addNewCourse')"><i class="add-icon"></i>New course</div>
+                    <div class="item" ng-if="courses.length !== 0" ng-click="goto('/addNewSubject')"><i class="add-icon"></i>New subject</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/RegisterStudent')"><i class="someone-new-icon"></i>Add student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="view-list-icon"></i>View students</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="delete-someone-icon "></i>Remove student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/registerLecturer')" ><i class="someone-new-icon"></i>Add lecturer</div>
+                    <div class="item active" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="view-list-icon"></i>View lecturer</div>
+                    <div class="item active" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="delete-someone-icon"></i>Remove lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/adminReports')"><i class="my-subjects"></i>View Reports</div>
+
+                </div>
+
+            </div>
+            <div class="container-fluid page-body" >
+                <div class="table-responsive well">
+                    <div class="input-group search-input" ng-if="allLecturers.length !== 0">
+                        <input placeholder="Search by stuff number" ng-model="query" ng-keyup="searchLecturer(allLecturers, query)" type="text" class="form-control " aria-describedby="search-query"/>
+                        <span class="input-group-addon" id="search-query"><span class="glyphicon glyphicon-search"></span></span>
+                    </div>
+                    <hr/>
+                    <div ng-if="allLecturers.length === 0" >
+                        <center>
+                            <h3 ng-click="goto('/registerLecturer')" class="btn btn-primary" style="margin: auto;width: 60%;height: 50px" >Empty ,Click here to register lecturer</h3>
+                        </center>
+                    </div>
+
+
+                    <div ng-if="allLecturers.length !== 0">              
+                        <div style="list-style-type: none;width: 100%">
+                            <div style="height: 50px;padding: 1%;margin: 1%;">
+                                <div style="float: left;width: 20%;">Lecturer Number</div>
+                                <div style="float: left;width: 20%;">Surname  Name</div>
+                                <div style="float: left;width: 30%;">E-mail Address</div>
+                                <div style="float: left;width: 5%;"></div>
+                                <div style="float: right;width: 25%;">Additional Functionality</div>
+
+                            </div>
+
+                        </div>
+                        <div style="list-style-type: none;margin-top: 1%;width: 100%">
+                          
+                            <div ng-if="searchResults.length === 0">
+                                <div ng-show="!notFound">
+                                    <div ng-repeat="lecturer in allLecturers" class="row" style="background-color: white;height: 45px;padding: 1%;border-radius: 10px;box-shadow: 1px 1px 10px;margin: 1%;">
+                                        <div style="float: left;width: 20%;">{{lecturer.userNumber}}</div>
+                                        <div style="float: left;width: 20%;">{{lecturer.surname}} &nbsp; {{lecturer.name}}</div>
+                                        <div style="float: left;width: 30%;">{{lecturer.email}}</div>
+                                        <div style="float: left;width: 5%;"></div>
+                                        <div style="float: right;width: 25%;">
+                                            <div style="float: left;width: 30%;" >
+                                                <a ng-click="editLec(lecturer)"><img title="Edit lecturer" src="../images/ic_edit_black.png" width="20" height="20" alt="ic_edit_user"/></a>
+
+                                            </div>
+
+                                            <div style="float: left;width: 30%;" >
+                                                <a ng-click="removeLecturer(lecturer)"><img title="Remove lecturer" src="../images/ic_delete.png" width="20" height="20" alt="ic_edit_user"/></a>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>      
+                            <div ng-if="searchResults.length !== 0">
+                                
+                                <div ng-repeat="lecturer in searchResults" class="row" style="background-color: white;height: 45px;padding: 1%;border-radius: 10px;box-shadow: 1px 1px 10px;margin: 1%;">
+                                    <div style="float: left;width: 20%;">{{lecturer.userNumber}}</div>
+                                    <div style="float: left;width: 20%;">{{lecturer.surname}} &nbsp; {{lecturer.name}}</div>
+                                    <div style="float: left;width: 30%;">{{lecturer.email}}</div>
+                                    <div style="float: left;width: 5%;"></div>
+                                    <div style="float: right;width: 25%;">
+                                        <div style="float: left;width: 30%;" >
+                                            <a ng-click="editLec(lecturer)"><img title="Edit lecturer" src="../images/ic_edit_black.png" width="20" height="20" alt="ic_edit_user"/></a>
+
+                                        </div>
+
+                                        <div style="float: left;width: 30%;" >
+                                            <a ng-click="removeLecturer(lecturer)"><img title="Remove lecturer" src="../images/ic_delete.png" width="20" height="20" alt="ic_edit_user"/></a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div ng-show="notFound">
+                                <center>
+                                    <h4>No records found</h4>
+                                </center>
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+
+
+            <div class="container-fluid page-body" >
+                <div class="footer ">
+                    <div class="left">
+                        <a href="#">Home</a>
+                        <span>|</span>
+                        <a href="#">Support</a>
+
+                        <span>|</span>
+                        <a href="#">Contact</a>
+
+                        <div class="right">
+                            &copy; 2017 TUT Web Attendance Register.
+                            Design by <a href="#" target="_blank" title="TUT attendence register">GROUP J</a>
+                        </div> 
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>

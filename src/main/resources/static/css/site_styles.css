@@ -1,0 +1,758 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26-Aug-2017, 00:39:55
+    Author     : Mmetsa
+*/
+
+.back-colour{
+    background-color: lightgrey;
+}
+.md-dialog-content{
+    width: 1000px;
+}
+
+.md-dialog-content table{
+    width: 100%;
+}
+.reports-area{}
+
+.reports-area div ul{
+    list-style-type: none;
+    font-size: 16px
+}
+
+
+.reports-area table{
+    border:none;
+    width: 100%;
+}
+.demo-tab-group {
+  border: 1px solid #e8e8e8;
+}
+
+.demo-tab-content {
+  padding: 16px;
+}
+
+.datepickerdemo md-content {
+    padding-bottom: 200px; 
+}
+
+.datepickerdemo .validation-messages {
+    font-size: 11px;
+    color: darkred;
+    margin: 10px 0 0 25px; 
+}
+
+.header{
+
+    height: 83px;
+    background-color: #337ab7;
+}
+.testing{
+    height: 100%;
+    background-color:#ebebeb;
+    box-shadow: 1px 1px 5px #888888;
+    font-family: Ariel;
+    font-size: 110%;
+    margin-top: 2%;
+
+}
+.item{
+    border-bottom: solid #888888 thin;
+    height: 49.7px;
+    padding-top: 50%;
+    background-color:#000\9
+}
+.testing div:hover{cursor: pointer;background-color: #337ab7 }
+.testing .active{color: white;background-color:#ac2925  }
+.action{
+    list-style-type: none;
+    float: right
+}
+.action li{width: 5%;}
+
+.students-register-list{
+    padding: 1%;
+}
+
+.students-register-list table{
+    border:none;
+    width: 100%;
+}
+
+.students-register-list table tr{
+    height:30px;
+}
+
+.students-register-list table tr:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.students-register-list table td li{
+    float: right;
+}
+
+.tile{
+    background-color: white;
+    height: 55px;
+    padding: 2% 1%;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px;margin: 1%;
+}
+/*-------------------------------Activate register styles -------------------------*/
+.active-home{
+    width: 70%;
+    padding-top: 1%;
+    padding-right: 2%;
+    padding-left: 2%;
+
+    margin-right: 20%; 
+    margin-left: 25%; 
+}
+
+.active-home .current-reg{
+    width: 100%;
+    min-height: 50px;
+    margin-right: 1%;
+    border:solid 0.5px lightgrey;
+    padding: 2%;
+    float: left;
+    box-shadow: 1px 1px 5px #888888;  
+    align-content: center;
+}
+
+.current-reg i:hover{cursor: pointer}
+
+
+/*-------------------------------------------------------------------------*/
+.lec-home{
+    width: 82%;
+    padding-top: 1%;
+    padding-right: 2%;
+    padding-left: 2%;
+    float: right
+}
+
+.lec-home .current-reg{
+    width: 59%;
+    min-height: 50px;
+    margin-right: 1%;
+    border:solid 0.5px lightgrey;
+    padding: 2%;
+    float: left;
+    box-shadow: 1px 1px 5px #888888;  
+}
+.lec-home .previous-reg{
+    width: 40%;
+    min-height: 50px;
+    padding: 2%;
+    border:solid 0.5px lightgrey;
+    float: right;
+    box-shadow: 1px 1px 5px #888888;      
+}
+
+.search-input{
+    width: 40%;
+    float: right;
+    font-size: 25%
+}
+.top-nav{
+    float: right;
+    width: 84.7%;
+    height: 80px ;
+    box-shadow: 1px 1px 5px #888888; 
+    background-color: #337ab7;
+    position: fixed;
+    font-size: 140%;
+    font-family: Ariel;
+    color:white;
+    padding-top: 1%;
+    padding-right: 2%;
+    padding-left: 2%;
+}
+.top-nav li:hover{
+    cursor: pointer;
+    background-color: #286090;
+}
+
+.nav-pic{
+    background-image: url(../images/loginPage.png);
+    height: 90px;
+    width: 84.7%;
+    float: right;
+    margin-bottom: 1%;
+}
+
+.top-nav center{
+    float: left;
+}
+
+.side-nav{
+    position: fixed;
+    left: 0px;
+    width: 15%;
+    height: 100%;
+    margin-top: 0%;
+    float: left;
+    background-color: silver;
+    box-shadow: 1px 1px 5px #888888; 
+    font-family: Ariel, Times, serif; 
+    font-size: 120%;
+
+}
+
+.side-nav hr{
+    margin-top: 25%;
+}
+
+
+.side-nav div{
+    padding: 2%;
+}
+
+.side-nav .menu{}
+.menu div{
+    display: block;
+    width: 95%;
+    height: 40px;
+    background-color: whitesmoke;
+    margin-top: 3%;
+    border:solid thin black;
+    border-left:none;
+    padding-left: 5%;
+    border-radius: 7px;
+    float: right;
+}
+
+.menu nav{
+    padding: 2%;
+    height: 40px;
+    border-left: solid thin lightgray
+}
+.menu i{}
+
+.menu div:hover{
+    width: 90%;
+    height: 30px;
+    background: #337ab7;
+    -webkit-transition: width 2s;
+    transition: background 1s;
+}
+.menu .active{
+    background: #337ab7;
+    height: 35px;
+    width: 90%;
+    background: #337ab7;
+    -webkit-transition: width 2s;
+    transition: background 2s;
+}
+
+.top-nav-bar{
+    position: fixed;
+    top: 0px;
+    width: 80%;
+    height: 65px;
+    display: block;
+    padding: 1%;
+    background-color: slategray;
+    float: right;
+}
+
+.top-nav-bar ul{
+    padding-left: 0%;
+    list-style-type: none;
+}
+
+.list-left li{
+    float: left;
+    display: block;
+}
+
+.list-right{
+    float: right;
+    margin-top: 0%;
+}
+.list-right ul{
+    list-style-type: none;
+    width: 100%;
+}
+.list-right li{
+    float: left;
+    display: block;
+
+}
+
+
+
+.page-body{
+    width: 80%;
+    float: right;
+    margin-top: 1%;
+    padding: 2%;
+}
+
+.navbar-default{
+    background-color: yellow;
+}
+
+.bar {
+
+    width: 20%;
+    background-color: #e7e7e7;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    margin-top: 50px;
+    padding: 1%;
+    float: left;
+    padding-bottom: 3%;
+
+    box-shadow: 2px 2px 10px #888888;   
+
+}
+
+
+
+.bar ul {
+
+    /*    list-style-type: none;
+        margin-top: 10px;
+        float: left;
+        width: 100%;*/
+
+}
+
+.bar li a {
+    /*    display: block;
+        color: #000;
+        padding: 8px 0 8px 16px;
+        text-decoration: none;*/
+
+}
+
+.bar li a.active {
+    /*    background-color: #4CAF50;
+        color: white;*/
+}
+
+.bar li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+
+
+.topNavBar{
+    height: 100px;
+
+    margin-top: 2%;
+    color: #a94442;
+    background-color: #e7e7e7;
+    padding: 1%;
+}
+
+/*.topNavBar a{
+    color: red;
+}*/
+.top_left{
+    float: left;
+}
+
+.top_right{
+    float: right;    
+}
+.top_right ul{
+    list-style-type: none;
+}
+.top_right li{
+    float:left; 
+}
+
+.down_bar{
+    padding: 0.5%;
+    width: 90%;
+    height: 55px;
+    float: left;
+    background-color: #ddd;
+}
+.down_bar ul{
+    /*    margin: auto;*/
+}
+.down_bar li{
+    width: 24%;
+    /*    font-family: Impact;*/
+}
+
+/*--------------------------------------------------------------------------------------------------------*/
+#body{   
+    min-height: 300px;
+    float: right;
+    width: 76%;
+}
+
+.formArea{
+    padding:3%;
+    min-width: 100%;
+    margin: auto
+}
+.formArea a{
+    cursor: pointer;
+}
+.tableStyles{
+    width: 100%
+}
+
+.fingerPrintArea{
+    float: right;
+    margin-top: 6%;
+}
+
+.tableStyles tr{
+    border-bottom: dashed #9d9d9d 1px;
+    height: 5px;
+}
+
+.tableStyles td{
+    border:dashed #9d9d9d 1px;
+    padding: 1.5%;
+}
+
+/*--------------------------------- FOOTER -----------------------------------------*/
+
+.footer{
+    float: end;
+    height:80px;
+    background:#ebebeb;
+    white-space:nowrap;
+    line-height:50px;
+    padding:0 15px;
+    color:#7b7b7b; 
+    margin-top:2%;
+    margin-bottom:2%;
+    width: 100%;
+
+}
+.footer a{ 
+    color:#7b7b7b;
+    text-decoration: none;}
+.footer a:hover{ color:#000;}
+.footer span{ padding:0 2px;}
+
+.right{
+    float:right; 
+    display:inline; 
+}
+
+/*=====================================================================================================================*/
+.navbar-default{
+
+    background-color: rgba(223, 228, 242, 0.90);
+    color: white;
+    box-shadow: 2px 2px 10px #888888;    
+    opacity:  10;
+    padding: 0.5%;
+
+}
+
+.navbar-default h1{
+    color:#222 
+}
+
+
+.navbar-default li:hover{
+
+    display: block;
+    border-radius: 10px 10px 10px 10px;
+    min-height: 20px;
+    background-color: beige;
+}
+
+.nav{
+    font-family: Ariel;
+    font-size: 120%;
+}
+
+
+/*.sidebar{
+    float: left;
+    width: 25%;
+}
+
+.sidebar li{
+    width: 100%;  
+}*/
+
+.sidebar li:hover{
+    cursor: pointer;
+}
+
+.sidebar button{
+    width: 100%;
+    height: 50px;
+}
+
+.sidebar .active{
+    background-color:#9d9d9d;
+}
+
+.buttonStyle{
+    border: solid 4px ;
+    border-radius: 10px;
+    border-color: #ac2925;
+    background-color: white;
+}
+
+
+
+#body table{
+    width: 100%;
+}
+.displayTableBody tr{
+
+    margin: 100%;
+    border: solid #000;
+}
+
+.displayTableHead td{
+    font-size: 100%;
+}
+
+.displayTableHead{
+    padding: 10%;  
+}
+
+.subject{
+
+}
+
+.subject input{
+    width: 10%;
+    border: none;
+}
+
+/*=========================================== ICONS ======================================================================*/
+
+
+
+.sid-header{
+    width: 100%;
+    display: block;
+    text-align: left;
+    padding: 4%;
+}
+
+.someone-new-icon{
+    background-image: url(../images/ic_person_add.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+}
+.someone-new-icon:hover{
+    cursor: pointer;
+}
+
+.view-list-icon{
+    background-image: url(../images/ic_list.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+   
+}
+.view-list-icon:hover{
+    cursor: pointer;
+}
+
+.delete-someone-icon{
+    background-image: url(../images/ic_delete.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+}
+.delete-someone-icon:hover{
+    cursor: pointer;
+}
+
+.add-icon{
+    background-image: url(../images/ic_add.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+}
+.add-icon:hover{
+    cursor: pointer;
+}
+
+.home-icon{
+
+    background: url(../images/004-home.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+}
+.home-icon:hover{
+    cursor: pointer;
+}
+.present{
+
+    background: url(../images/checked.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: right;
+    width: 20%;
+    padding: 2%;
+    cursor: pointer;
+}
+
+.absent{
+
+    background: url(../images/absent.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: right;
+    width: 20%;
+    padding: 2%;
+   
+}
+.absent:hover{
+    cursor: pointer;
+}
+
+.check{
+
+    background: url(../images/check.png);
+    background-repeat: no-repeat;
+    float: right;
+    height: 30px;
+    width: 5%;
+}
+.check:hover{
+    cursor: pointer;
+}
+.sync{
+
+    background: url(../images/sync.png);
+    background-repeat: no-repeat;
+    float: right;
+    height: 30px;
+    width: 5%;
+}
+.sync:hover{
+    cursor: pointer;
+}
+
+.auth-user{
+
+    background: url(../images/ic_person.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 2%;
+    cursor: pointer;
+}
+.auth-user:hover{
+    cursor: pointer;
+}
+
+.close-item{
+
+    background: url(../images/close.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: right;
+    width: 5%;
+    cursor: pointer;
+}
+.close-item:hover{
+    cursor: pointer;
+}
+
+.generate{
+
+    background: url(../images/generate.png);
+    background-repeat: no-repeat;
+    height: 30px;  
+    padding:  0%  10% 0% 10%; 
+    cursor: pointer;
+}
+.generate:hover{
+    cursor: pointer;
+}
+
+
+.titles{
+    float: right;
+}
+.syncStop{
+    background: url(../images/stop.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: right;
+    width: 5%;
+    cursor: pointer;
+}
+.syncStop:hover{
+    cursor: pointer;
+}
+
+.stop{
+
+    background: url(../images/001-verified-text-paper.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: right;
+    width: 5%;
+}
+.stop:hover{
+    cursor: pointer;
+}
+
+.activate-reg{
+
+    background: url(../images/005-circle.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+    cursor: pointer;
+}
+.logout{
+
+    background: url(../images/002-arrow.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+    padding: 2%;
+        cursor: pointer;
+}
+
+.my-subjects{
+
+    background: url(../images/003-books-stack-of-three.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+    cursor: pointer;
+}
+
+.profile{
+
+    background: url(../images/profile.png);
+    background-repeat: no-repeat;
+    height: 30px;
+    float: left;
+    width: 30%;
+    cursor: pointer;
+}

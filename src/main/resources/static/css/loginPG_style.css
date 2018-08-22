@@ -1,0 +1,75 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-Sep-2017, 17:09:59
+    Author     : Mmetsa
+*/
+
+.body-bck{
+
+
+}
+
+body{
+    
+    background-image: url(../images/loginPage.png);
+    background-repeat: no-repeat;
+
+    background-size: 100%;
+
+}
+
+.login-form-area{
+
+
+    width: 60%;
+    padding: 5%;
+    min-height: 250px;
+    background-color: white ;
+/*    //background:rgba(0,0,0,0.5);*/
+/*     background-color: #ac2925;*/
+    border-radius: 5px;
+    box-shadow: 1px 1px 20px;
+    margin: auto;
+    margin-top: 90px;
+}
+
+.login-form-area input{
+    cursor: pointer;
+}
+
+.login-header{
+
+}
+
+.login-header label{
+    font-size: 300%;
+}
+
+.login-body{}
+
+.login-body label{
+    font-size: 200%;
+
+}
+
+.fInput {
+    min-height: 45px;
+    font-size: 120%;
+
+}
+
+.login-btn{
+    min-height: 50px;
+    border-color: #ac2925;
+    background-color: white;
+    border-radius: 10px;
+    min-width: 48%;
+    border:  solid 4px;
+    font-size: 150%;
+
+}
+

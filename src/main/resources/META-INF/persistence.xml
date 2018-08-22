@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="za.ac.tut_TUT_AttendanceSystem_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>za.ac.tut.entity.Lecturer</class>
+    <class>za.ac.tut.entity.Subject</class>
+    <class>za.ac.tut.entity.Course</class>
+    <class>za.ac.tut.repository.CourseRepository</class>
+    <class>za.ac.tut.entity.StudentSubjects</class>
+    <class>za.ac.tut.entity.StudSubject</class>
+    <class>za.ac.tut.entity.LecturerSubject</class>
+    <class>za.ac.tut.entity.AttendanceSheet</class>
+    <class>za.ac.tut.entity.StudentAttendanceSheet</class>
+    <class>takealot.dot.com.entity.Product</class>
+    <class>takealot.dot.com.entity.CustomerOrder</class>
+    <class>takealot.dot.com.entity.Customer</class>
+    <class>takealot.dot.com.entity.OrderAddress</class>
+    <class>takealot.dot.com.entity.OrderProduct</class>
+    <class>takealot.dot.com.entity.Administrator</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tut_attendance_db?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>

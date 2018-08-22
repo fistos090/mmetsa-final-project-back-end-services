@@ -1,0 +1,73 @@
+<md-dialog aria-label="" style="margin-left: 21%;">
+    <form ng-cloak="">
+
+
+        <md-dialog-content style="max-width:1400px;max-height:700px;">
+            <div class="md-dialog-content">
+                <table border="0">
+
+                    <tr>
+                        <td><div class="col-md-4">Report name </div><div class="col-md-6">: {{reportData.reportName}}</div></td>
+                        <td style="border-left: solid 1px lightgray"><div class="col-md-3">Report date </div><div class="col-md-6">: {{reportData.todaysDate}}</div></td>
+                    </tr>
+                </table >
+                <hr/>
+                <table border="0">
+                    <tr>
+                        <td><div class="col-md-5">Student name </div><div></div>: {{reportData.student.lastname}} {{reportData.student.firstname}}</td>
+                        <td><div class="col-md-4">Subject code</div><div>: {{reportData.subject.subjectCode}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-5">Student number</div><div>: {{reportData.student.studentNumber}}</div></td>
+                        <td><div class="col-md-4">Subject description</div><div>: {{reportData.subject.subjectDesc}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-5">Student ID</div><div>: {{reportData.student.idNumber}}</div></td>
+                        <td><div class="col-md-4">Course code</div><div>: {{reportData.course.courseCode}}</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="col-md-4"></div><div></div></td>
+                        <td><div class="col-md-4">Course description</div><div>: {{reportData.course.courseDescription}}</div></td>
+                    </tr>
+
+                </table>
+                <hr/>
+                <h3>Records</h3>
+                <hr/>
+                <table border="0" ng-if="reportData.records.length !== 0">
+                    <thead>
+                        <tr style="border-bottom: solid 1px lightgray;padding: 10px 0px">
+                            <th>Record #</th>
+                            <th>Attendance date</th>
+                            <th>Attendance status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="record in reportData.records">
+                            <td>{{$index + 1}}</td>
+                            <td>{{record.recordDate}}</td>
+                            <td>{{record.status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div  ng-if="reportData.records.length === 0">
+                    <h3 style="text-align: center;">No records found</h3>
+                </div>
+
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" >
+            <md-button ng-disabled="reportData.records.length === 0" class="md-raised md-primary" ng-click="printReport(reportData,'/TUT/lecturer/printReport/studentRange')" md-autofocus="">
+                Print Report
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="cancel()" md-autofocus="">
+                Cancel
+            </md-button>
+            <span flex=""></span>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

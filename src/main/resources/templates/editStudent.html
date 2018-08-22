@@ -1,0 +1,211 @@
+<html>
+    <head>
+        <title>TTT</title>
+
+    </head>
+    <body ng-if="loginID !== null" >
+        <div class=" " style="background-color: #f9f9f9;">
+<div class="nav-pic">
+                <div class="top-nav ">
+                    <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                    <div class="list-right">
+                        <ul>
+                            <li><b id="sysTime"></b></li>
+                        </ul>
+                        <ul >
+
+                            <li style="width: 50%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                                Logout
+                            </li>
+                            <li style="width: 50%;" ng-if="userName === null">
+
+                            </li>
+                            <li><a ></a></li>
+
+                        </ul><br/>
+
+                    </div>
+                </div>
+            </div>
+            <div class="side-nav">
+                <div class="header">
+                    <center><b>TUT ATTENDANCE SYSTEM</b></center>
+                </div>
+                <div class="testing">
+                    <div class="item active" ng-click="goto('/index')">Home<i class="home-icon"></i></div>
+                    <div class="item" ng-click="goto('/addNewCourse')"><i class="add-icon"></i>New course</div>
+                    <div class="item" ng-if="courses.length !== 0" ng-click="goto('/addNewSubject')"><i class="add-icon"></i>New subject</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/RegisterStudent')"><i class="someone-new-icon"></i>Add student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="view-list-icon"></i>View students</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="delete-someone-icon "></i>Remove student</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/registerLecturer')" ><i class="someone-new-icon"></i>Add lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="view-list-icon"></i>View lecturer</div>
+                    <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="delete-someone-icon"></i>Remove lecturer</div>
+               <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/adminReports')"><i class="my-subjects"></i>View Reports</div>
+                
+                </div>
+
+            </div>
+            <center>
+        <div class="active-home">
+            <div class="current-reg">
+
+
+                <div class=" formArea">
+
+                    <table style="width: 78%;float: left">
+                        <tr >
+                            <td >
+                                <p>
+                                    <label style="font-size: 190%;">Update Student Record</label>
+
+                                </p>
+                            </td>
+
+                        </tr>
+                    </table>
+
+
+                    <form ng-submit="updateStudent(editStudent, 'update')">
+
+                        <table style="width: 90%;" class="tableStyles">
+                            <tr >
+                                <td >
+                                    <label>Student Number</label>
+                                </td>
+                                <td >
+                                    <input ng-model="editStudent.studentNumber" disabled="" required="" type="number" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr >
+                                <td >
+                                    <label>ID Number</label>
+                                </td>
+                                <td >
+                                    <input ng-model="editStudent.idNumber" disabled="" required="" ng-change="insertEmail(student)" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Lastname</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editStudent.lastname" required="" ng-change="insertEmail(student)" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Firstname</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editStudent.firstname" required="" ng-change="insertEmail(student)" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Gender</label>
+                                </td>
+                                <td>
+                                    <select ng-model="editStudent.gender" disabled="" class="form-control" >
+                                        <option >Male</option>
+                                        <option>Female</option>         
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td >
+                                    <label>Phone Number</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editStudent.cellnumber" required="" type="text" ng-style="cellStyle" ng-change="changeCellStyle()" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Email</label>
+                                </td>
+                                <td>
+                                    <input disabled="" ng-model="editStudent.email" required="" ng-change="insertEmail(student)" type="email" class="form-control" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td >
+                                    <label>Postal Address</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editStudent.address" required="" ng-change="insertEmail(student)" class="form-control" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td >
+                                    <label>Course Code</label>
+                                </td>
+                                <td>
+                                    <select ng-change="sortByCourseCode(editStudent.courseCode)" ng-model="editStudent.courseCode" placeholder="ttttt" class="form-control" >
+                                        <option ng-repeat="course in courses" >{{course.courseCode}} | {{course.courseDescription}}</option>      
+                                    </select>
+                                </td>
+                            </tr>
+                            
+                            <tr ng-if="subjectsToDisplay.length !== 0">
+                                <td class="subject" colspan="2">
+                                    <div ng-if="subjectsToDisplay.length !== 0">
+                                        <label>COURSE : {{editStudent.courseCode}}</label>
+                                    </div>
+                                    <label>Select Subjects</label><br/>
+                                    <div ng-if="subjectsToDisplay.length !== 0">
+                                        <input id="ALL" ng-click="selectAll(subjectsToDisplay)" class="" type="checkbox"   />Select All&nbsp;
+
+                                        <br/>
+                                        <div ng-repeat="sub in subjectsToDisplay" class="col-md-3" style="float: left;">
+                                            <input ng-checked="changeState(selectedList, sub.subjectCode)" id="{{sub.subjectCode}}" ng-click="addAndRemove(selectedList, sub.subjectCode)" class="" type="checkbox"   />&nbsp;{{sub.subjectCode}}&nbsp;
+                                        </div>
+                                    </div> 
+                                </td>
+                            </tr>
+                            <tr >
+                                <td colspan="2">
+                                    <button style="width: 100%" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                        UPDATE
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+            </center>
+
+            <div class="container-fluid page-body" >
+                <div class="footer ">
+                    <div class="left">
+                        <a href="#">Home</a>
+                        <span>|</span>
+                        <a href="#">Support</a>
+
+                        <span>|</span>
+                        <a href="#">Contact</a>
+
+                        <div class="right">
+                            &copy; 2017 TUT Web Attendance Register.
+                            Design by <a href="#" target="_blank" title="TUT attendence register">GROUP J</a>
+                        </div> 
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</html>

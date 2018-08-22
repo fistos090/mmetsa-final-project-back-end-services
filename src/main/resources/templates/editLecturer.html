@@ -1,0 +1,208 @@
+<html>
+    <head>
+        <title>TTT</title>
+
+    </head>
+    <body ng-if="loginID !== null" >
+
+        <div class="nav-pic">
+            <div class="top-nav ">
+                <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                <div class="list-right">
+                    <ul>
+                        <li><b id="sysTime"></b></li>
+                    </ul>
+                    <ul >
+
+                        <li style="width: 50%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                            Logout
+                        </li>
+                        <li style="width: 50%;" ng-if="userName === null">
+
+                        </li>
+                        <li><a ></a></li>
+
+                    </ul><br/>
+
+                </div>
+            </div>
+        </div>
+        <div class="side-nav">
+            <div class="header">
+                <center><b>TUT ATTENDANCE SYSTEM</b></center>
+            </div>
+            <div class="testing">
+                <div class="item" ng-click="goto('/index')">Home<i class="home-icon"></i></div>
+                <div class="item" ng-click="goto('/addNewCourse')"><i class="add-icon"></i>New course</div>
+                <div class="item" ng-if="courses.length !== 0" ng-click="goto('/addNewSubject')"><i class="add-icon"></i>New subject</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/RegisterStudent')"><i class="someone-new-icon"></i>Add student</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="view-list-icon"></i>View students</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllStudents()"><i class="delete-someone-icon "></i>Remove student</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/registerLecturer')" ><i class="someone-new-icon"></i>Add lecturer</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="view-list-icon"></i>View lecturer</div>
+                <div class="item" ng-if="subjects.length !== 0" ng-click="displayAllLecturers()" ><i class="delete-someone-icon"></i>Remove lecturer</div>
+            <div class="item" ng-if="subjects.length !== 0" ng-click="goto('/adminReports')"><i class="my-subjects"></i>View Reports</div>
+                
+            </div>
+            <div class="input-group search-input" style="float: end">
+                <input placeholder="Search by student number" ng-model="query" ng-keyup="search(attendingStudents, query)" type="text" class="form-control " aria-describedby="search-query"/>
+                <span class="input-group-addon" id="search-query"><span class="glyphicon glyphicon-search"></span></span>
+            </div>
+        </div>
+    <center>
+        <div class="active-home">
+            <div class="current-reg">
+
+                <div class=" formArea">
+
+                    <table style="float: left">
+                        <tr >
+                            <td >
+                                <p>
+                                    <label style="font-size: 190%;">Update lecturer details</label>
+
+                                </p>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                    <form >
+
+                        <table  class="tableStyles">
+                            <tr >
+                                <td >
+                                    <label>Lecturer Number </label>
+                                </td>
+                                <td >
+                                    <input disabled="" ng-style="studNumberStyle" required="" ng-model="editLecturer.userNumber" ng-change="insertLecturerEmail(lecturer);changeStudNumberStyle()" type="number" class="form-control fInput" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td >
+                                    <label>Lastname</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editLecturer.surname" required=""  ng-change="insertLecturerEmail(lecturer)" class="form-control fInput" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Firstname</label>
+                                </td>
+                                <td>
+                                    <input ng-model="editLecturer.name" required="" ng-change="insertLecturerEmail(lecturer)" class="form-control" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td >
+                                    <label>Email Address</label>
+                                </td>
+                                <td>
+                                    <input ng-style="cellStyle" required="" ng-model="editLecturer.email" type="email" ng-change="insertLecturerEmail(lecturer);changeCellStyle()" class="form-control fInput" />
+                                </td>
+                            </tr>
+
+
+
+                            <tr>
+                                <td colspan="2">
+                                    <div style="width: 40%;float: left;">
+                                        <label>Lecturer Subjects</label><br/><hr/>
+                                        <br/>
+                                        <div ng-repeat="sub in subjectsToDisplay" class="row" style="height: 25px;">
+                                            <div style="width: 70%;float: left;">
+                                                &nbsp; &nbsp;{{$index + 1}}&nbsp;&nbsp;{{sub.subjectCode}}&nbsp;|&nbsp;{{sub.subjectDesc}}&nbsp;
+                                            </div>
+                                            <div style="width: 30%;float: right">
+
+                                                <button ng-click="addAndRemove(subjectsToDisplay, sub.subjectCode)"  > 
+                                                    Remove subject
+                                                </button>
+                                            </div>
+                                        </div><br/>
+                                    </div>
+                                    <div style="width: 58%;float: right;">
+                                        <label>System Subjects</label><br/><hr/>
+                                        <div class="row" style="padding: 2%;" ng-repeat="course in courses">
+                                            <label>COURSE : {{course.courseCode}}&nbsp;|&nbsp;{{course.courseDescription}}</label><br/>
+                                            <label>Select Subjects</label><br/>
+                                            <br/>
+                                            <div ng-repeat="sub in subjects" class="row" >
+                                                <div ng-if="sub.courseCode === course.courseCode" style="height: 25px;">
+                                                    <div style="width: 70%;float: left;">
+                                                        &nbsp;&nbsp;{{$index + 1}}&nbsp; &nbsp;{{sub.subjectCode}} | {{sub.subjectDesc}}
+                                                    </div>
+                                                    <div style="width: 30%;float: right">
+
+                                                        <button ng-click="addTo(subjectsToDisplay, sub)"  > 
+                                                            Add to lecturer's subject
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div><br/>
+                                        </div><br/> 
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr >
+                                <td colspan="2">
+                                    <button style="width: 100%" ng-click="updateLecturer(editLecturer)" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                        Update Details
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </form>
+
+
+                </div>
+
+                <div class="alert alert-success" ng-if="successAlert">
+                    <a ng-click="closeAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong> {{message}}
+                </div>
+                <!--<div class="alert alert-warning">
+                    <strong>Warning!</strong> {{message}}
+                </div>-->
+                <div class="alert alert-danger" ng-if="failureAlert"> 
+                    <a ng-click="closeAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Danger!</strong> {{message}}.
+                </div>
+
+
+            </div>
+        </div>
+    </center>
+
+
+    <div class="container-fluid page-body" >
+        <div class="footer ">
+            <div class="left">
+                <a href="#">Home</a>
+                <span>|</span>
+                <a href="#">Support</a>
+
+                <span>|</span>
+                <a href="#">Contact</a>
+
+                <div class="right">
+                    &copy; 2017 TUT Web Attendance Register.
+                    Design by <a href="#" target="_blank" title="TUT attendence register">GROUP J</a>
+                </div> 
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

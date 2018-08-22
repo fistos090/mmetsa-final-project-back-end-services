@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>yes</title>
+    </head>
+    <body>
+        <div class="nav-pic">
+            <div class="top-nav ">
+                <i class="auth-user"></i><span  ng-if="userName !== null">{{userName}} | {{role}}</span>     
+                <div class="list-right">
+                    <ul>
+                        <li><b id="sysTime"></b></li>
+                    </ul>
+                    <ul >
+
+                        <li style="width: 30%;float:right;text-align: right" ng-if="userName !== null" ng-click="signOut()" >
+                            <i class="logout"></i>Logout
+                        </li>
+                        <li style="width: 50%;" ng-if="userName === null">
+
+                        </li>
+                        <li><a ></a></li>
+
+                    </ul><br/>
+
+                </div>
+            </div>
+        </div>
+        <div class="side-nav">
+
+            <div class="header">
+                <center><b>TUT ATTENDANCE SYSTEM</b></center>
+            </div>
+            <div class="testing">
+                <div class="item " ng-click="goto('/lecturerHome')">My home<i class="home-icon"></i></div>
+                <div class="item active" ng-click="goto('/activateReg')"><i class="activate-reg"></i>Activate register</div>
+                <div class="item" ng-click="goto('/lecturerReports')"><i class="my-subjects"></i>View Reports</div>
+                <div class="item" ng-click="goto('/profile')"><i class="profile"></i>My Profile</div>
+            </div>         
+        </div>
+
+        <div class="active-home">
+
+
+            <div class="current-reg">
+                <h3>Activate register</h3><br/>
+                <hr/>
+                <div class=" formArea">
+
+                    <table style="width: 78%;float: left">
+                        <tr >
+                            <td >
+                                <p>
+                                    <label style="font-size: 190%;">New register information</label>
+
+                                </p>
+                            </td>
+
+                        </tr>
+                    </table>
+
+
+                    <form ng-submit="activateRegister(register)">
+
+
+                        <table style="width: 78%;" class="tableStyles">
+                            <tr >
+                                <td >
+                                    <label>Lecturer Number</label>
+                                </td>
+                                <td >
+                                    <input ng-style="studNumberStyle" disabled="true" ng-model="register.lecturerNo" ng-change="insertEmail(student);changeStudNumberStyle()" type="number" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr >
+                                <td >
+                                    <label>Venue [Lab/Class Number]</label>
+                                </td>
+                                <td>
+                                    <select ng-model="register.venue" class="form-control" ng-change="changeVenueStyle()" ng-style="regVenueSty" >
+                                        <option >--Select venue--</option>  
+                                        <option >B10-140</option>  
+                                        <option >B10-120</option>  
+                                        <option >B10-20</option>  
+                                        <option >B10-36</option>  
+                                        <option >B14-1108</option>  
+                                        <option >B13-G95</option>  
+                                        <option >B10-28</option>  
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Date</label>
+                                </td>
+                                <td>
+                                    <input disabled="" ng-model="register.registerDate" required="" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <label>Subject code</label>
+                                </td>
+                                <td>
+                                    <select  ng-model="register.subjectCode"  ng-style="subjectCodeSty" ng-change="subjectCodeStyle()" class="form-control" >
+                                        <option  >--Select subject--</option>
+                                        <option ng-repeat="sub in subjects" >{{sub.subjectCode}}</option>  
+                                    </select>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="2">
+                                    <button style="width: 100%" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                        Activate register
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </form>
+
+
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
