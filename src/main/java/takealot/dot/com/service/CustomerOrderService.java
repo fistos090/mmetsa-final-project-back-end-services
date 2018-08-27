@@ -75,7 +75,7 @@ public class CustomerOrderService {
         Date date = new Date(System.currentTimeMillis());
 
         //TODO fix the shipping cost issue. For now I am using Zero(0) as placeholder
-        CustomerOrder custOrder = new CustomerOrder(customerID, 0, date);
+        CustomerOrder custOrder = new CustomerOrder(customerID, 0,"OPEN", date);
 
         String url = "/";
         String message = "";
@@ -234,6 +234,7 @@ public class CustomerOrderService {
 
             for (ProductWrapper productWrapper : wrappedProducts) {
                 if (orderProduct.getProductId() == productWrapper.getProduct().getId()) {
+                    productWrapper.getProduct().setQuantity(orderProduct.getQuantity());
                     products.add(productWrapper);
                 }
             }

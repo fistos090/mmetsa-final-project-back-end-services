@@ -31,6 +31,8 @@ public class CustomerOrder implements Serializable {
     private Long custID;
     @Column(length = 10, nullable = false)
     private double shippingCost;
+    @Column(length = 10, nullable = false)
+    private String orderStatus;
     @Column(length = 30, nullable = false, name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date custOrderDate;
@@ -40,12 +42,21 @@ public class CustomerOrder implements Serializable {
     public CustomerOrder() {
     }
 
-    public CustomerOrder(Long custID, double shippingCost, Date custOrderDate) {
+//    public CustomerOrder(Long custID, double shippingCost, Date custOrderDate) {
+//        this.custID = custID;
+//        this.shippingCost = shippingCost;
+//        this.custOrderDate = custOrderDate;
+//        this.custOrderTime = custOrderDate;
+//    }
+
+    public CustomerOrder(Long custID, double shippingCost, String orderStatus, Date custOrderDate) {
         this.custID = custID;
         this.shippingCost = shippingCost;
+        this.orderStatus = orderStatus;
         this.custOrderDate = custOrderDate;
         this.custOrderTime = custOrderDate;
     }
+    
 
     public Long getCustID() {
         return custID;
