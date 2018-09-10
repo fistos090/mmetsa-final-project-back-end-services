@@ -20,6 +20,8 @@ import takealot.dot.com.entity.Administrator;
 import takealot.dot.com.entity.wrapper.AdminWrapper;
 import takealot.dot.com.entity.wrapper.ProductWrapper;
 import takealot.dot.com.restcontroller.AdminController;
+import takealot.dot.com.service.message.helpers.Email;
+import takealot.dot.com.service.message.helpers.EmailEventEmitter;
 
 /**
  *
@@ -32,9 +34,9 @@ public class AdminService {
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
-    private EmailService emailService;
-    @Autowired
     private ImageManager imageManager;
+    @Autowired
+    private EmailEventEmitter emailEventEmitter;
 
     public HashMap registerAdmin(AdminWrapper adminWrapper, HttpSession session) throws UnsupportedEncodingException {
 
@@ -75,20 +77,15 @@ public class AdminService {
 
                 loginResponse = login(admin, session);
 
-                try {
+                String emailBody = "Hi " + admin.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
+                        + " Your registered email address is <b>" + admin.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
+                String subject = "Takealot.com Registration Confirmation";
 
-                    String emailBody = "Hi " + admin.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
-                            + " Your registered email address is <b>" + admin.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
-                    String subject = "Takealot.com Registration Confirmation";
+                // emailService.sendEmail(subject, emailBody, admin.getEmail());
+                Email email = new Email(emailBody, admin.getEmail(), subject);
+                this.emailEventEmitter.emitEmailEvent(email);
 
-                    emailService.sendEmail(subject, emailBody, admin.getEmail());
-
-                    message = "You are successfully registered and a confirmation email was sent to your email";
-
-                } catch (MessagingException ex) {
-                    Logger.getLogger(AdminService.class.getName()).log(Level.SEVERE, null, ex);
-                    message = "You have successfully created an account with us. Unfortunately we could not manage to send you a confirmation email";
-                }
+                message = "You are successfully registered and a confirmation email was sent to your email";
 
             }
 
@@ -102,7 +99,7 @@ public class AdminService {
             url = "/login";
             response.put("status", "CONFLICT");
         }
-
+        
         response.put("loginResponse", loginResponse);
         response.put("message", message);
         response.put("url", url);

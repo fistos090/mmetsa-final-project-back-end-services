@@ -33,17 +33,30 @@ public class AdminController {
     public static HashMap logonAdminIds = new HashMap();
     @Autowired
     private AdminService service;
+    private final String ssacode = "939!1993";
 
-    @RequestMapping(method = RequestMethod.POST, value = "/admin/register")
-    public HashMap registerNewUser(@RequestBody AdminWrapper adminWrapper,HttpServletRequest request) {
+    @RequestMapping(method = RequestMethod.POST, value = "/admin/register/{ssacode}")
+    public HashMap registerNewUser(@RequestBody AdminWrapper adminWrapper, @PathVariable("ssacode") String ssacode, HttpServletRequest request) {
 
         System.out.println(adminWrapper);
-        
+
         HashMap responseDetails = null;
-        try {
-            responseDetails = service.registerAdmin(adminWrapper,request.getSession());
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        if (ssacode != null) {
+            if (this.ssacode.equals(ssacode)) {
+                try {
+                    responseDetails = service.registerAdmin(adminWrapper, request.getSession());
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                responseDetails = new HashMap();
+                responseDetails.put("status", "FAILED");
+                responseDetails.put("message", "System security access code is incorrect");
+            }
+        } else {
+                responseDetails = new HashMap();
+                responseDetails.put("status", "FAILED");
+                responseDetails.put("message", "Invalid System security access code provided");
         }
 
         return responseDetails;
@@ -53,9 +66,9 @@ public class AdminController {
     public HashMap signIn(@RequestBody Administrator admin, HttpServletRequest request) {
 
         try {
-            
+
             HashMap responseDetails = service.login(admin, request.getSession());
-            
+
             return responseDetails;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
