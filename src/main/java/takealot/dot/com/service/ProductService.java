@@ -196,10 +196,10 @@ public class ProductService {
             JSONObject productData = (JSONObject) jsonData.get("product");
 
             String productName = productData.getString("productName");
-            String productDesc = productData.getString("DESC");
-            double price = productData.getDouble("PRICE");
-            String category = productData.getString("CATEGORY");
-            int quantity = productData.getInt("QUANTITY");
+            String productDesc = productData.getString("productDesc");
+            double price = productData.getDouble("price");
+            String category = productData.getString("category");
+            int quantity = productData.getInt("quantity");
             String img = productData.getString("prodImage");
 
             String[] tokens = img.split(",");
