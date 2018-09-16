@@ -38,47 +38,47 @@ public class ProductService {
     private ImageManager imageManager;
     @Autowired
     private SimpMessagingTemplate template;
-    
+
     private final ProductWrapper[] homePageProducts = new ProductWrapper[15];
-    
-    public HashMap getHomePageProducts(){
-        
+
+    public HashMap getHomePageProducts() {
+
         HashMap response = new HashMap();
-        
+
         response.put("homeProducts", this.homePageProducts);
-        
+
         return response;
     }
-    
-    public HashMap AddHomePageProduct(Long productId) throws UnsupportedEncodingException{
-        
+
+    public HashMap AddHomePageProduct(Long productId) throws UnsupportedEncodingException {
+
         HashMap response = new HashMap();
         Product product = productRepository.findOne(productId);
-        
-        if(product != null){
+
+        if (product != null) {
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
-        
+
             ProductWrapper tempProduct = null;
-            if(this.homePageProducts.length > 0){
-                    tempProduct = this.homePageProducts[this.homePageProducts.length - 1];
+            if (this.homePageProducts.length > 0) {
+                tempProduct = this.homePageProducts[this.homePageProducts.length - 1];
             }
-        
-            if(tempProduct == null){
+
+            if (tempProduct == null) {
                 this.homePageProducts[this.homePageProducts.length - 1] = productWrapper;
             }
             response.put("status", "PRODUCT_ADDED");
         } else {
             response.put("status", "LIST_FULL");
         }
-        
+
         return response;
     }
-    
-    public HashMap removeHomePageProduct(Long productId){
+
+    public HashMap removeHomePageProduct(Long productId) {
         HashMap response = new HashMap();
         response.put("status", "NOT_FOUND");
-        for( int s = 0; s < this.homePageProducts.length; s++ ){
-            if(this.homePageProducts[s].getProduct().getId().equals(productId)){
+        for (int s = 0; s < this.homePageProducts.length; s++) {
+            if (this.homePageProducts[s].getProduct().getId().equals(productId)) {
                 this.homePageProducts[s] = null;
                 response.put("status", "REMOVED");
             }
@@ -91,16 +91,14 @@ public class ProductService {
         HashMap productsDetails = new HashMap();
         ArrayList<Product> products = getAllProducts();//convert Iterable into ArrayList
         ArrayList<ProductWrapper> wrappedProducts = new ArrayList<>();
-        
+
         products = getOnstockProduct(products);//Remove product with negative quantity
 
-        
-        for(Product product : products){
-            
+        for (Product product : products) {
+
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
             wrappedProducts.add(productWrapper);
         }
-        
 
         productsDetails.put("products", wrappedProducts);
 
@@ -115,9 +113,8 @@ public class ProductService {
 
         products = getOnstockProduct(products);//Remove product with negative quantity
 
-        
-        for(Product product : products){
-            
+        for (Product product : products) {
+
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
             wrappedProducts.add(productWrapper);
         }
@@ -172,8 +169,8 @@ public class ProductService {
     public int loadProducts() {
         int i = 1;
         for (; i <= 15; i++) {
-            
-            Product p = new Product("black forest", "ddd", 13.9 * i,  "cakes", 23 * i, "egdfg".getBytes(),"imageAdditonalInfo");
+
+            Product p = new Product("black forest", "ddd", 13.9 * i, "cakes", 23 * i, "egdfg".getBytes(), "imageAdditonalInfo");
             productRepository.save(p);
         }
 
@@ -195,28 +192,41 @@ public class ProductService {
         if (adminService.adminHasLogin(sessionID, admin.getEmail())) {
             JSONObject productData = (JSONObject) jsonData.get("product");
 
+//            Long prodId = productData.isNull("id");
             String productName = productData.getString("productName");
             String productDesc = productData.getString("productDesc");
             double price = productData.getDouble("price");
             String category = productData.getString("category");
             int quantity = productData.getInt("quantity");
-            String img = productData.getString("prodImage");
+            String img = productData.getString("productImage");
 
             String[] tokens = img.split(",");
 
             //BASE64Decoder decoder = new BASE64Decoder();
             byte[] productImage = imageManager.createDecodedImage(tokens[1]); //Base64.base64Decode(tokens[1].getBytes());
-
-            Product product = new Product(productName,productDesc, price, category, quantity, productImage, tokens[0]);
+            Product product;
+            System.out.println("productData.isNull(\"id\") "+productData.isNull("id"));
+            if (productData.isNull("id")) {
+                product = new Product(productName, productDesc, price, category, quantity, productImage, tokens[0]);
+            } else {
+                product = new Product(productData.getLong("id"), productName, productDesc, price, category, quantity, productImage, tokens[0]);
+                
+            }
 
             Product newProd = productRepository.save(product);
 
             //ArrayList<Product> categoryProducts = productRepository.findByCategory(category);
             //int newProductID = categoryProducts.get(categoryProducts.size() - 1).getId().intValue();
             if (newProd.getId() != null) {
-                message = "A new product has been added to database with product ID " + newProd.getId();
-            }else{
-                message = "A new product could not be added";
+                if (productData.isNull("id")) {
+                    message = "New product record has been added to database with product ID " + newProd.getId();
+                } else {
+                    message = "Product record is updated successfully";
+                }
+                
+                response.put("product_id", newProd.getId());
+            } else {
+                message = "Product record could not be added or updated";
             }
             status = "CREATED";
         }
@@ -231,23 +241,22 @@ public class ProductService {
     private void notifySystemAdmin(Product... products) throws UnsupportedEncodingException {
 
         //Product product = products.length > 0 ? products[0] : null;
-       
         String message = "<h3>The following products are out stock. They won't be display to the customers<h3> <br><br>";
         ProductNotifyMessage productNotifyMessage = new ProductNotifyMessage();
         ArrayList<ProductWrapper> wrappedProducts = new ArrayList<>();
-        
+
         productNotifyMessage.setUserType("Server");
         productNotifyMessage.setMessageContent(message);
-        
-        for(Product product : products){
-           ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
-           wrappedProducts.add(productWrapper);
+
+        for (Product product : products) {
+            ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
+            wrappedProducts.add(productWrapper);
         }
-        
+
         productNotifyMessage.setOnlineAdmins(wrappedProducts);
-        
+
         template.convertAndSend("/alertBroadcast/adminsGroup/", productNotifyMessage);
-        
+
     }
 
 }
