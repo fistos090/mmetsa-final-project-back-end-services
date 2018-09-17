@@ -205,12 +205,12 @@ public class ProductService {
             //BASE64Decoder decoder = new BASE64Decoder();
             byte[] productImage = imageManager.createDecodedImage(tokens[1]); //Base64.base64Decode(tokens[1].getBytes());
             Product product;
-            System.out.println("productData.isNull(\"id\") "+productData.isNull("id"));
+            System.out.println("productData.isNull(\"id\") " + productData.isNull("id"));
             if (productData.isNull("id")) {
                 product = new Product(productName, productDesc, price, category, quantity, productImage, tokens[0]);
             } else {
                 product = new Product(productData.getLong("id"), productName, productDesc, price, category, quantity, productImage, tokens[0]);
-                
+
             }
 
             Product newProd = productRepository.save(product);
@@ -223,7 +223,7 @@ public class ProductService {
                 } else {
                     message = "Product record is updated successfully";
                 }
-                
+
                 response.put("product_id", newProd.getId());
             } else {
                 message = "Product record could not be added or updated";
@@ -257,6 +257,38 @@ public class ProductService {
 
         template.convertAndSend("/alertBroadcast/adminsGroup/", productNotifyMessage);
 
+    }
+
+    public HashMap removeProduct(String requestData) {
+        
+         HashMap response = new HashMap();
+        JSONObject jsonData = new JSONObject(requestData);
+        
+        Long adminID = jsonData.getLong("adminID");
+        String sessionID = jsonData.getString("sessionID");
+        
+        String status = "FAILED";
+        String message = "Your request has failed. Please try again later.";
+        
+        Administrator admin = adminRepository.findOne(adminID);
+        
+        if (adminService.adminHasLogin(sessionID, admin.getEmail())) {
+             int numOfProductsBefore = getAllProducts().size();
+             
+             productRepository.delete(jsonData.getLong("productID"));
+             
+             int numOfProductsAfter = getAllProducts().size();
+             
+             if( numOfProductsAfter < numOfProductsBefore){
+                 status = "REMOVED";
+                 message = "Product is removed from bakery database";
+             }
+        }
+        
+        response.put("message", message);
+        response.put("status", status);
+        
+        return response;
     }
 
 }
