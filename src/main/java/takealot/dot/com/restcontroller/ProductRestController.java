@@ -73,7 +73,14 @@ public class ProductRestController {
 
     @GetMapping(value = "/getHomeProducts")
     public HashMap getHomePageProducts() {
-        return productService.getHomePageProducts();
+        
+        try {
+            return productService.getHomePageProducts();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ProductRestController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/addHomePageProduct")
