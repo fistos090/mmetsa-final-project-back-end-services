@@ -52,7 +52,7 @@ public class ProductService {
         if (pws.size() > 15) {
             this.homePageProducts = (ProductWrapper[]) pws.subList(0, 15).toArray(homePageProducts);
         } else {
-             this.homePageProducts = (ProductWrapper[]) pws.subList(0, pws.size() - 1).toArray();
+             this.homePageProducts = (ProductWrapper[]) pws.subList(0, pws.size() - 1).toArray(homePageProducts);
         }
         
         response.put("homeProducts", this.homePageProducts);
