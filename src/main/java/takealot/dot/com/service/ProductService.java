@@ -39,12 +39,22 @@ public class ProductService {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private final ProductWrapper[] homePageProducts = new ProductWrapper[15];
+    private ProductWrapper[] homePageProducts = new ProductWrapper[15];
 
-    public HashMap getHomePageProducts() {
+    public HashMap getHomePageProducts() throws UnsupportedEncodingException {
 
         HashMap response = new HashMap();
+        
+        HashMap allShopProduct = getAllShopProduct();
+        
+        ArrayList<ProductWrapper> pws = (ArrayList<ProductWrapper>)allShopProduct.get("products");
 
+        if (pws.size() > 15) {
+            this.homePageProducts = (ProductWrapper[]) pws.subList(0, 15).toArray(homePageProducts);
+        } else {
+             this.homePageProducts = (ProductWrapper[]) pws.subList(0, pws.size() - 1).toArray();
+        }
+        
         response.put("homeProducts", this.homePageProducts);
 
         return response;
