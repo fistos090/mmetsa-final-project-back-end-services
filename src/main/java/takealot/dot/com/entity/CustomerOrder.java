@@ -89,6 +89,14 @@ public class CustomerOrder implements Serializable {
     public void setCustOrderTime(Date custOrderTime) {
         this.custOrderTime = custOrderTime;
     }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
     
     public Long getId() {
         return id;

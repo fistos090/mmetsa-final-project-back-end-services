@@ -60,15 +60,15 @@ public class AdminService {
         }
 
         if (isUnique) {
+//
+//            String imageData = adminWrapper.getEncodedAdminImage();
+//
+//            String[] tokens = imageData.split(",");
 
-            String imageData = adminWrapper.getEncodedAdminImage();
-
-            String[] tokens = imageData.split(",");
-
-            byte[] productImage = imageManager.createDecodedImage(tokens[1]);
-
-            admin.setImageAdditonalInfo(tokens[0]);
-            admin.setAdminImage(productImage);
+//            byte[] productImage = imageManager.createDecodedImage(tokens[1]);
+//
+            admin.setImageAdditonalInfo("fgfdgfdgdfg");
+            admin.setAdminImage("fgfdfgdfgdg".getBytes());
 
             Administrator savedAdmin = adminRepository.save(admin);
 

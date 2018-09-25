@@ -29,6 +29,8 @@ import takealot.dot.com.entity.OrderAddress;
 import takealot.dot.com.entity.OrderProduct;
 import takealot.dot.com.entity.Product;
 import takealot.dot.com.entity.wrapper.ProductWrapper;
+import takealot.dot.com.service.message.helpers.Email;
+import takealot.dot.com.service.message.helpers.EmailEventEmitter;
 
 /**
  *
@@ -57,6 +59,8 @@ public class CustomerOrderService {
     private AdminService adminService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private EmailEventEmitter emailEventEmitter;
 
     public HashMap processOrder(String orderData) throws JSONException, MessagingException {
 
@@ -68,7 +72,7 @@ public class CustomerOrderService {
         String sessionID = (String) jObj.get("sessionID");
         JSONObject addressObj = (JSONObject) jObj.get("addressInfo");
 
-        JSONObject customerData = new JSONObject(jObj.getString("user"));
+        JSONObject customerData = jObj.getJSONObject("user");// new JSONObject();
         Long customerID = customerData.getLong("id");
 
         //Create timestamp for the order
@@ -131,9 +135,9 @@ public class CustomerOrderService {
 
                     String firstname = customerData.getString("firstname");
                     String emailBody = createEmailBody(OrderNumber, firstname, allProducts, orderProducts);
-                    System.out.println(emailBody);
-
-                    emailService.sendEmail(subject, emailBody, emailAddress);
+                 
+                    Email email = new Email(emailBody, emailAddress, subject);
+                    this.emailEventEmitter.emitEmailEvent(email);
 
                 }
 
