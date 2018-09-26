@@ -68,17 +68,15 @@ public class ProductService {
         if (product != null) {
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
 
-            ProductWrapper tempProduct = null;
-            if (this.homePageProducts.length > 0) {
-                tempProduct = this.homePageProducts[this.homePageProducts.length - 1];
+            if (this.homePageProducts.size() <= 15) {
+                this.homePageProducts.add(productWrapper);
+                 response.put("status", "PRODUCT_ADDED");
+            } else {
+                response.put("status", "LIST_FULL");
             }
-
-            if (tempProduct == null) {
-                this.homePageProducts[this.homePageProducts.length - 1] = productWrapper;
-            }
-            response.put("status", "PRODUCT_ADDED");
+           
         } else {
-            response.put("status", "LIST_FULL");
+            response.put("status", "NOT_FOUND");
         }
 
         return response;
@@ -87,9 +85,9 @@ public class ProductService {
     public HashMap removeHomePageProduct(Long productId) {
         HashMap response = new HashMap();
         response.put("status", "NOT_FOUND");
-        for (int s = 0; s < this.homePageProducts.length; s++) {
-            if (this.homePageProducts[s].getProduct().getId().equals(productId)) {
-                this.homePageProducts[s] = null;
+        for (int s = 0; s < this.homePageProducts.size(); s++) {
+            if (this.homePageProducts.get(s).getProduct().getId().equals(productId)) {
+                this.homePageProducts.remove(s);
                 response.put("status", "REMOVED");
             }
         }
