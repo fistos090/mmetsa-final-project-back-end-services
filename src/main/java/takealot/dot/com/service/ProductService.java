@@ -39,7 +39,7 @@ public class ProductService {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private ProductWrapper[] homePageProducts;
+    private ProductWrapper[] homePageProducts = new ProductWrapper[15];
 
     public HashMap getHomePageProducts() throws UnsupportedEncodingException {
 
