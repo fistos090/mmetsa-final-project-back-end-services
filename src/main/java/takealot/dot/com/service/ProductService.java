@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class ProductService {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private ArrayList<ProductWrapper> homePageProducts;
+    private List<ProductWrapper> homePageProducts;
 
     public HashMap getHomePageProducts() throws UnsupportedEncodingException {
 
@@ -50,9 +51,9 @@ public class ProductService {
         ArrayList<ProductWrapper> pws = (ArrayList<ProductWrapper>)allShopProduct.get("products");
 
         if (pws.size() > 15) {
-            this.homePageProducts = (ArrayList<ProductWrapper>) pws.subList(0, 15);
+            this.homePageProducts = pws.subList(0, 15);
         } else {
-            this.homePageProducts = (ArrayList<ProductWrapper>) pws.subList(0, pws.size());
+            this.homePageProducts = pws.subList(0, pws.size());
         }
         
         response.put("homeProducts", this.homePageProducts);
@@ -65,6 +66,10 @@ public class ProductService {
         HashMap response = new HashMap();
         Product product = productRepository.findOne(productId);
 
+        if ( this.homePageProducts == null) {
+             this.homePageProducts = new ArrayList<>();
+        }
+        
         if (product != null) {
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
 
