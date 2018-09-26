@@ -39,7 +39,7 @@ public class ProductService {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private ProductWrapper[] homePageProducts = new ProductWrapper[15];
+    private ArrayList<ProductWrapper> homePageProducts;
 
     public HashMap getHomePageProducts() throws UnsupportedEncodingException {
 
@@ -50,9 +50,9 @@ public class ProductService {
         ArrayList<ProductWrapper> pws = (ArrayList<ProductWrapper>)allShopProduct.get("products");
 
         if (pws.size() > 15) {
-            this.homePageProducts = (ProductWrapper[]) pws.subList(0, 15).toArray(homePageProducts);
+            this.homePageProducts = (ArrayList<ProductWrapper>) pws.subList(0, 15);
         } else {
-             this.homePageProducts = (ProductWrapper[]) pws.subList(0, pws.size() - 1).toArray(homePageProducts);
+            this.homePageProducts = (ArrayList<ProductWrapper>) pws.subList(0, pws.size());
         }
         
         response.put("homeProducts", this.homePageProducts);
