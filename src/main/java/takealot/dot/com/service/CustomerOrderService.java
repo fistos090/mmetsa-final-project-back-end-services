@@ -7,6 +7,7 @@ package takealot.dot.com.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -375,4 +376,90 @@ public class CustomerOrderService {
 //
 //        return response;
 //    }
+
+    public HashMap deleteOrder(String requestData) {
+        HashMap response = new HashMap();
+        
+        JSONObject jObj = new JSONObject(requestData);
+        
+        String sessionID = jObj.getString("sessionID");
+        String adminEmail = jObj.getString("email");
+        
+        String status = "FAILED";
+        String message = "Please login to perform action.";
+         System.out.println(adminEmail+ " 1111111 =====> "+ sessionID);
+         
+         
+        if (adminService.adminHasLogin(sessionID, adminEmail)) {
+            System.out.println("deleting =====>");
+            Long orderID = jObj.getLong("orderID");
+            List<CustomerOrder> beforeDeletion = this.getAllOrders();
+            System.out.println(adminEmail+ " 1111111 =====> ID"+ orderID);
+            custOrderRepository.delete(orderID);
+            
+            List<CustomerOrder> afterDeletion = this.getAllOrders();
+            
+            System.out.println("beforeDeletion.size() "+beforeDeletion.size());
+            System.out.println("afterDeletion.size() "+afterDeletion.size());
+                        
+            if (beforeDeletion.size() > afterDeletion.size()) {
+                 System.out.println("removed =====>");
+                status = "REMOVED";
+                message = "Customer order deleted.";
+            } else if(beforeDeletion.size() < afterDeletion.size()) {
+                 System.out.println("unknown =====>");
+                status = "UNKNOWN";
+                message = "Operation status is unkown.";
+            }
+            
+        }
+        
+         System.out.println("removed =====>");
+        
+        response.put("message", message);
+        response.put("status", status);
+                    
+        return response;
+    }
+
+    public HashMap updateOrder(String requestData) {
+        HashMap response = new HashMap();
+        
+        JSONObject jObj = new JSONObject(requestData);
+        
+        String sessionID = jObj.getString("sessionID");
+        String adminEmail = jObj.getString("email");
+        
+        String status = "FAILED";
+        String message = "Please login to perform action.";
+        
+        if (adminService.adminHasLogin(sessionID, adminEmail)) {
+            
+            JSONObject customerOrder = new JSONObject(jObj.get("order"));
+            System.out.println("&&&&&&&&&&&======> "+customerOrder);
+//            Calendar cal = Calendar.getInstance();
+//            
+//            cal.
+//            CustomerOrder order = new CustomerOrder(customerOrder.getLong("id"), 0, customerOrder.getString("orderStatus"), custOrderDate)
+//            List<CustomerOrder> beforeDeletion = this.getAllOrders();
+//            
+//            orderProdRepository.delete(orderID);
+//            
+//            List<CustomerOrder> afterDeletion = this.getAllOrders();
+//            
+//            if (beforeDeletion.size() > afterDeletion.size()) {
+//                status = "REMOVED";
+//                message = "Customer order deleted.";
+//            } else if(beforeDeletion.size() < afterDeletion.size()) {
+//                status = "UNKNOWN";
+//                message = "Operation status is unkown.";
+//            }
+            
+        }
+        
+        response.put("message", message);
+        response.put("status", status);
+
+        return response;
+    }
 }

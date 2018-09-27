@@ -128,7 +128,9 @@ public class CustomerOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "takealot.dot.com.entity.CustomerOrder[ id=" + id + " ]";
+        return "CustomerOrder{" + "id=" + id + ", custID=" + custID + ", shippingCost=" + shippingCost + ", orderStatus=" + orderStatus + ", custOrderDate=" + custOrderDate + ", custOrderTime=" + custOrderTime + '}';
     }
+
+  
 
 }

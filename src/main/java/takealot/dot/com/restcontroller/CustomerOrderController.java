@@ -76,13 +76,23 @@ public class CustomerOrderController {
         return response;
     }
 
-//    @RequestMapping(method = RequestMethod.GET,value = {"/deleteOrder/{sessionID}/{orderID}",})
-//    public HashMap deleteOrder(@PathVariable() Long orderID,@PathVariable String sessionID,HttpServletRequest request){
-//
-//        HashMap response = orderService.getAllOrders(sessionID,request.getSession());
-// 
-//        return response;
-//    }
+    
+    
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteCustomerOrder")
+    public HashMap deleteOrder(@RequestBody String requestData){
+
+        HashMap response = orderService.deleteOrder(requestData);
+ 
+        return response;
+    }
+    
+    @RequestMapping(method = RequestMethod.POST,value = "/updateCustomerOrder")
+    public HashMap updateOrder(@RequestBody String requestData){
+
+        HashMap response = orderService.updateOrder(requestData);
+
+        return response;
+    }
 //    @RequestMapping(method = RequestMethod.GET, value = "/printInvoice/{sessionID}/{adminID}")
 //    public HashMap printInvoice(@PathVariable("sessionID") String sessionID, @PathVariable("adminID") Long adminID) {
 //
