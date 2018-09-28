@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import takealot.dot.com.data.access.manager.AdminRepository;
+import takealot.dot.com.data.access.manager.OrderProductRepository;
 import takealot.dot.com.data.access.manager.ProductRepository;
 import takealot.dot.com.entity.Administrator;
+import takealot.dot.com.entity.OrderProduct;
 import takealot.dot.com.entity.Product;
 import takealot.dot.com.entity.wrapper.ProductWrapper;
 import takealot.dot.com.service.message.ProductNotifyMessage;
@@ -38,6 +40,8 @@ public class ProductService {
     @Autowired
     private ImageManager imageManager;
     @Autowired
+    private OrderProductRepository orderProdRepository;
+    @Autowired
     private SimpMessagingTemplate template;
 
     private List<ProductWrapper> homePageProducts;
@@ -45,17 +49,17 @@ public class ProductService {
     public HashMap getHomePageProducts() throws UnsupportedEncodingException {
 
         HashMap response = new HashMap();
-        
+
         HashMap allShopProduct = getAllShopProduct();
-        
-        ArrayList<ProductWrapper> pws = (ArrayList<ProductWrapper>)allShopProduct.get("products");
+
+        ArrayList<ProductWrapper> pws = (ArrayList<ProductWrapper>) allShopProduct.get("products");
 
         if (pws.size() > 15) {
             this.homePageProducts = pws.subList(0, 15);
         } else {
             this.homePageProducts = pws.subList(0, pws.size());
         }
-        
+
         response.put("homeProducts", this.homePageProducts);
 
         return response;
@@ -66,20 +70,20 @@ public class ProductService {
         HashMap response = new HashMap();
         Product product = productRepository.findOne(productId);
 
-        if ( this.homePageProducts == null) {
-             this.homePageProducts = new ArrayList<>();
+        if (this.homePageProducts == null) {
+            this.homePageProducts = new ArrayList<>();
         }
-        
+
         if (product != null) {
             ProductWrapper productWrapper = new ProductWrapper(product, imageManager.createEncodedImage(product.getImageAdditonalInfo(), product.getProductImage()));
 
             if (this.homePageProducts.size() <= 15) {
                 this.homePageProducts.add(productWrapper);
-                 response.put("status", "PRODUCT_ADDED");
+                response.put("status", "PRODUCT_ADDED");
             } else {
                 response.put("status", "LIST_FULL");
             }
-           
+
         } else {
             response.put("status", "NOT_FOUND");
         }
@@ -273,34 +277,42 @@ public class ProductService {
     }
 
     public HashMap removeProduct(String requestData) {
-        
-         HashMap response = new HashMap();
+
+        HashMap response = new HashMap();
         JSONObject jsonData = new JSONObject(requestData);
-        
+
         Long adminID = jsonData.getLong("adminID");
         String sessionID = jsonData.getString("sessionID");
-        
+
         String status = "FAILED";
         String message = "Your request has failed. Please try again later.";
-        
+
         Administrator admin = adminRepository.findOne(adminID);
-        
+
         if (adminService.adminHasLogin(sessionID, admin.getEmail())) {
-             int numOfProductsBefore = getAllProducts().size();
-             
-             productRepository.delete(jsonData.getLong("productID"));
-             
-             int numOfProductsAfter = getAllProducts().size();
-             
-             if( numOfProductsAfter < numOfProductsBefore){
-                 status = "REMOVED";
-                 message = "Product is removed from bakery database";
-             }
+
+            List<OrderProduct> orderProducts = orderProdRepository.findByProductId(jsonData.getLong("productID"));
+            if (orderProducts.size() <= 0) {
+                int numOfProductsBefore = getAllProducts().size();
+                productRepository.delete(jsonData.getLong("productID"));
+
+                int numOfProductsAfter = getAllProducts().size();
+
+                if (numOfProductsAfter < numOfProductsBefore) {
+                    status = "REMOVED";
+                    message = "Product is removed from bakery database";
+                }
+            } else {
+                status = "FAILED";
+                message = "Product couldn't be removed due referential integrity. "
+                        + "Remove orders that have products referring to this product first and try again.";
+            }
+
         }
-        
+
         response.put("message", message);
         response.put("status", status);
-        
+
         return response;
     }
 

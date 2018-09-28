@@ -387,35 +387,29 @@ public class CustomerOrderService {
         
         String status = "FAILED";
         String message = "Please login to perform action.";
-         System.out.println(adminEmail+ " 1111111 =====> "+ sessionID);
-         
          
         if (adminService.adminHasLogin(sessionID, adminEmail)) {
-            System.out.println("deleting =====>");
+          
             Long orderID = jObj.getLong("orderID");
             List<CustomerOrder> beforeDeletion = this.getAllOrders();
-            System.out.println(adminEmail+ " 1111111 =====> ID"+ orderID);
+            
+            List<OrderProduct> orderProducts = orderProdRepository.findByOrderID(orderID);
+            orderProdRepository.delete(orderProducts);
+            
             custOrderRepository.delete(orderID);
             
             List<CustomerOrder> afterDeletion = this.getAllOrders();
-            
-            System.out.println("beforeDeletion.size() "+beforeDeletion.size());
-            System.out.println("afterDeletion.size() "+afterDeletion.size());
-                        
+                                 
             if (beforeDeletion.size() > afterDeletion.size()) {
-                 System.out.println("removed =====>");
                 status = "REMOVED";
                 message = "Customer order deleted.";
             } else if(beforeDeletion.size() < afterDeletion.size()) {
-                 System.out.println("unknown =====>");
                 status = "UNKNOWN";
                 message = "Operation status is unkown.";
             }
             
         }
-        
-         System.out.println("removed =====>");
-        
+             
         response.put("message", message);
         response.put("status", status);
                     
@@ -435,26 +429,31 @@ public class CustomerOrderService {
         
         if (adminService.adminHasLogin(sessionID, adminEmail)) {
             
-            JSONObject customerOrder = new JSONObject(jObj.get("order"));
-            System.out.println("&&&&&&&&&&&======> "+customerOrder);
-//            Calendar cal = Calendar.getInstance();
-//            
-//            cal.
-//            CustomerOrder order = new CustomerOrder(customerOrder.getLong("id"), 0, customerOrder.getString("orderStatus"), custOrderDate)
-//            List<CustomerOrder> beforeDeletion = this.getAllOrders();
-//            
-//            orderProdRepository.delete(orderID);
-//            
-//            List<CustomerOrder> afterDeletion = this.getAllOrders();
-//            
-//            if (beforeDeletion.size() > afterDeletion.size()) {
-//                status = "REMOVED";
-//                message = "Customer order deleted.";
-//            } else if(beforeDeletion.size() < afterDeletion.size()) {
-//                status = "UNKNOWN";
-//                message = "Operation status is unkown.";
-//            }
+            JSONObject customerOrder = new JSONObject(jObj.get("order").toString());
+
+            Long id = customerOrder.getLong("id");
+            Long custID = customerOrder.getLong("custID");
+            String orderStatus = customerOrder.getString("orderStatus");
             
+            String[] dateTokens = customerOrder.getString("custOrderDate").split("-");
+            String[] timeTokens = customerOrder.getString("custOrderTime").split(":");
+            
+            Calendar cal = Calendar.getInstance();
+            cal.set(
+                    
+                Integer.parseInt(dateTokens[0]),
+                Integer.parseInt(dateTokens[1]),
+                Integer.parseInt(dateTokens[2]),
+                Integer.parseInt(timeTokens[0]),
+                Integer.parseInt(timeTokens[1]),
+                Integer.parseInt(timeTokens[2])
+            );
+             
+              CustomerOrder cOrder = new CustomerOrder(id,custID, 0, orderStatus, cal.getTime());
+              custOrderRepository.save(cOrder);
+              
+              status = "UPDATED";
+              message = "Order has been marked as processed or closed";
         }
         
         response.put("message", message);

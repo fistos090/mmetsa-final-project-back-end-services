@@ -57,6 +57,15 @@ public class CustomerOrder implements Serializable {
         this.custOrderTime = custOrderDate;
     }
     
+    public CustomerOrder(Long id,Long custID, double shippingCost, String orderStatus, Date custOrderDate) {
+        this.id = id;
+        this.custID = custID;
+        this.shippingCost = shippingCost;
+        this.orderStatus = orderStatus;
+        this.custOrderDate = custOrderDate;
+        this.custOrderTime = custOrderDate;
+    }
+    
 
     public Long getCustID() {
         return custID;

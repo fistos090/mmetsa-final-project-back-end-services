@@ -69,6 +69,14 @@ public class CustomerController {
 
         return response;
     }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllRegisteredCustomers/{sessionID}/{userID}")
+    public HashMap getAllUsers(@PathVariable("sessionID") String sessionID, @PathVariable("userID") Long userID) {
+
+        HashMap response = service.getAllRegisteredCustomers(sessionID, userID);
+
+        return response;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/customer/updateProfile/{sessionID}")
     public HashMap updateProfile(@RequestBody Customer cus,@PathVariable("sessionID") String sessionID) {

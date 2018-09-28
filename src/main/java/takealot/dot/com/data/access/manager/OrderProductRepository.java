@@ -15,4 +15,5 @@ import takealot.dot.com.entity.OrderProduct;
  */
 public interface OrderProductRepository extends CrudRepository<OrderProduct, Long>{
     public List<OrderProduct> findByOrderID(Long orderID);
+    public List<OrderProduct> findByProductId(Long productId);
 }

@@ -14,7 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import takealot.dot.com.data.access.manager.AdminRepository;
 import takealot.dot.com.data.access.manager.CustomerRepository;
+import takealot.dot.com.data.access.manager.OrderAddressRepository;
+import takealot.dot.com.data.access.manager.OrderProductRepository;
+import takealot.dot.com.entity.Administrator;
 import takealot.dot.com.entity.Customer;
 import takealot.dot.com.restcontroller.CustomerController;
 import takealot.dot.com.service.message.helpers.Email;
@@ -30,6 +34,10 @@ import takealot.dot.com.service.message.helpers.EmailEventEmitter;
 @Service
 public class CustomerService {
 
+    @Autowired
+    private AdminRepository adminRepository;
+    @Autowired
+    private AdminService adminService;
     @Autowired
     private CustomerRepository userRepository;
     @Autowired
@@ -295,4 +303,23 @@ public class CustomerService {
         return  CustomerController.logonCustomerIds.remove(email) != null;
     }
 
+    public HashMap getAllRegisteredCustomers(String sessionID, Long userID) {
+         HashMap response = new HashMap();
+          
+        String status = "FAILED";
+        String message = "Please login to perform action.";
+        
+        Administrator admin = adminRepository.findOne(userID);
+        if (adminService.adminHasLogin(sessionID, admin.getEmail())) {
+            status = "FETCHED";
+            message = "List of registered customers if successfully fetched";
+            response.put("customers", getAllUsers());
+        }
+            
+        response.put("message", message);
+        response.put("status", status);
+        
+        return response;
+    }
+    
 }
