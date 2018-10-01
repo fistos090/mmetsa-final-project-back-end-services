@@ -5,6 +5,10 @@
  */
 package takealot.dot.com.service;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import takealot.dot.com.data.access.manager.AdminRepository;
@@ -60,15 +65,6 @@ public class AdminService {
         }
 
         if (isUnique) {
-//
-//            String imageData = adminWrapper.getEncodedAdminImage();
-//
-//            String[] tokens = imageData.split(",");
-
-//            byte[] productImage = imageManager.createDecodedImage(tokens[1]);
-//
-            admin.setImageAdditonalInfo("fgfdgfdgdfg");
-            admin.setAdminImage("fgfdfgdfgdg".getBytes());
 
             Administrator savedAdmin = adminRepository.save(admin);
 
@@ -143,7 +139,7 @@ public class AdminService {
                     markAsSignedIn(session, email);
 
                     //Attaching admin image to admin logged in 
-                    adminWrapper = new AdminWrapper(arrayUser, imageManager.createEncodedImage(arrayUser.getImageAdditonalInfo(), arrayUser.getAdminImage()));
+                    adminWrapper = new AdminWrapper(arrayUser, "ghghg,fddf");
 
                     //TODO - Check admin stock updates
                     break;

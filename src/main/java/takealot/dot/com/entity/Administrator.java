@@ -33,10 +33,6 @@ public class Administrator implements Serializable {
     private String email;
     @Column(length = 50)
     private String password;
-    @Lob
-    private byte[] adminImage;
-    @Column(nullable=false, length=25)
-    private String imageAdditonalInfo;
 
     public Administrator() {
     }
@@ -48,14 +44,6 @@ public class Administrator implements Serializable {
         this.password = password;
     }
 
-    public Administrator(String firstname, String lastname, String email, String password, byte[] adminImage, String imageAdditonalInfo) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.adminImage = adminImage;
-        this.imageAdditonalInfo = imageAdditonalInfo;
-    }
     
     public Administrator(Long id, String firstname, String lastname, String email, String password) {
         this.id = id;
@@ -65,22 +53,6 @@ public class Administrator implements Serializable {
         this.password = password;
     }
 
-    public byte[] getAdminImage() {
-        return adminImage;
-    }
-
-    public void setAdminImage(byte[] adminImage) {
-        this.adminImage = adminImage;
-    }
-
-    public String getImageAdditonalInfo() {
-        return imageAdditonalInfo;
-    }
-
-    public void setImageAdditonalInfo(String imageAdditonalInfo) {
-        this.imageAdditonalInfo = imageAdditonalInfo;
-    }
-    
     public String getFirstname() {
         return firstname;
     }
@@ -145,9 +117,7 @@ public class Administrator implements Serializable {
 
     @Override
     public String toString() {
-        return "Administrator{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", password=" + password + ", adminImage=" + adminImage + ", imageAdditonalInfo=" + imageAdditonalInfo + '}';
+        return "Administrator{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", password=" + password + '}';
     }
-
-    
     
 }

@@ -13,5 +13,5 @@ import takealot.dot.com.entity.OrderAddress;
  * @author Mmetsa
  */
 public interface OrderAddressRepository extends CrudRepository<OrderAddress, Long>{
-    
+    public OrderAddress findByOrderID(Long id);
 }

@@ -36,7 +36,7 @@ public class CustomerOrder implements Serializable {
     @Column(length = 30, nullable = false, name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date custOrderDate;
-     @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIME)
     private Date custOrderTime;
 
     public CustomerOrder() {

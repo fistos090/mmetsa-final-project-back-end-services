@@ -5,6 +5,11 @@
  */
 package takealot.dot.com.service;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +67,8 @@ public class CustomerOrderService {
     private EmailService emailService;
     @Autowired
     private EmailEventEmitter emailEventEmitter;
+    @Autowired
+    private FilePrinterService filePrinterService;
 
     public HashMap processOrder(String orderData) throws JSONException, MessagingException {
 
@@ -80,7 +87,7 @@ public class CustomerOrderService {
         Date date = new Date(System.currentTimeMillis());
 
         //TODO fix the shipping cost issue. For now I am using Zero(0) as placeholder
-        CustomerOrder custOrder = new CustomerOrder(customerID, 0,"OPEN", date);
+        CustomerOrder custOrder = new CustomerOrder(customerID, 0, "OPEN", date);
 
         String url = "/";
         String message = "";
@@ -136,7 +143,7 @@ public class CustomerOrderService {
 
                     String firstname = customerData.getString("firstname");
                     String emailBody = createEmailBody(OrderNumber, firstname, allProducts, orderProducts);
-                 
+
                     Email email = new Email(emailBody, emailAddress, subject);
                     this.emailEventEmitter.emitEmailEvent(email);
 
@@ -280,6 +287,38 @@ public class CustomerOrderService {
         }
     }
 
+    public void printCustomerOrderReport(OutputStream stream, String requestData) throws DocumentException, BadElementException, IOException {
+
+        JSONObject jObj = new JSONObject(requestData);
+      
+        Administrator admin = adminRepository.findOne(jObj.getLong("adminID"));
+        
+        if (adminService.adminHasLogin(jObj.getString("sessionID"), admin.getEmail())) {
+            
+            JSONArray orderIds = (JSONArray) jObj.get("orderIDs");
+
+            Document document = filePrinterService.createPdfReport(stream, admin,"Bakery customers' orders report");
+
+            for (int x = 0; x < orderIds.length(); x++) {
+                JSONObject orderIdObj = orderIds.getJSONObject(x);
+
+                CustomerOrder cusOrder = custOrderRepository.findOne(orderIdObj.getLong("orderID"));
+                Customer customer = customerRepository.findOne(cusOrder.getCustID());
+                OrderAddress address = addressRepository.findByOrderID(cusOrder.getId());
+                HashMap customerOrderProducts = getCustomerOrderProducts(cusOrder.getId());
+
+                List<ProductWrapper> orderProducts = (List<ProductWrapper>) customerOrderProducts.get("orderProducts");
+
+                filePrinterService.addAllOrderInfoToReport(customer, address, cusOrder, orderProducts);
+
+            }
+
+            document.close();
+
+        }
+
+    }
+
     private String createEmailBody(Long OrderNumber, String firstname, ArrayList<Product> allProducts, List<OrderProduct> lineProducts) {
 
         String rows = "";
@@ -339,123 +378,84 @@ public class CustomerOrderService {
         return emailBody;
     }
 
-//    public HashMap printInvoice(String sessionID, Long adminID) {
-//        HashMap response = new HashMap();
-//
-//        String message = "";
-//        String status = "";
-//
-//        UserTB dUser = userRepository.findOne(adminID);
-//        String loginID = dUser.getLoginID();
-//
-//        if (sessionID.equals(loginID)) {
-//
-//            try {
-//                ArrayList<Product> allProducts = productService.getAllProducts();
-//                List<ClientOrder> allOrders = getAllOrders();
-//
-//                message = printerService.printInvoice(allOrders, allProducts);
-//
-//                if (allOrders.isEmpty()) {
-//                    status = "FAILED";
-//                } else {
-//
-//                    status = "OK";
-//                }
-//
-//                response.put("allOrders", allOrders);
-//
-//            } catch (IOException ex) {
-//                Logger.getLogger(ClientOrderService.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//        }
-//
-//        response.put("message", message);
-//        response.put("status", status);
-//
-//        return response;
-//    }
-
     public HashMap deleteOrder(String requestData) {
         HashMap response = new HashMap();
-        
+
         JSONObject jObj = new JSONObject(requestData);
-        
+
         String sessionID = jObj.getString("sessionID");
         String adminEmail = jObj.getString("email");
-        
+
         String status = "FAILED";
         String message = "Please login to perform action.";
-         
+
         if (adminService.adminHasLogin(sessionID, adminEmail)) {
-          
+
             Long orderID = jObj.getLong("orderID");
             List<CustomerOrder> beforeDeletion = this.getAllOrders();
-            
+
             List<OrderProduct> orderProducts = orderProdRepository.findByOrderID(orderID);
             orderProdRepository.delete(orderProducts);
-            
+
             custOrderRepository.delete(orderID);
-            
+
             List<CustomerOrder> afterDeletion = this.getAllOrders();
-                                 
+
             if (beforeDeletion.size() > afterDeletion.size()) {
                 status = "REMOVED";
                 message = "Customer order deleted.";
-            } else if(beforeDeletion.size() < afterDeletion.size()) {
+            } else if (beforeDeletion.size() < afterDeletion.size()) {
                 status = "UNKNOWN";
                 message = "Operation status is unkown.";
             }
-            
+
         }
-             
+
         response.put("message", message);
         response.put("status", status);
-                    
+
         return response;
     }
 
     public HashMap updateOrder(String requestData) {
         HashMap response = new HashMap();
-        
+
         JSONObject jObj = new JSONObject(requestData);
-        
+
         String sessionID = jObj.getString("sessionID");
         String adminEmail = jObj.getString("email");
-        
+
         String status = "FAILED";
         String message = "Please login to perform action.";
-        
+
         if (adminService.adminHasLogin(sessionID, adminEmail)) {
-            
+
             JSONObject customerOrder = new JSONObject(jObj.get("order").toString());
 
             Long id = customerOrder.getLong("id");
             Long custID = customerOrder.getLong("custID");
             String orderStatus = customerOrder.getString("orderStatus");
-            
+
             String[] dateTokens = customerOrder.getString("custOrderDate").split("-");
             String[] timeTokens = customerOrder.getString("custOrderTime").split(":");
-            
+
             Calendar cal = Calendar.getInstance();
             cal.set(
-                    
-                Integer.parseInt(dateTokens[0]),
-                Integer.parseInt(dateTokens[1]),
-                Integer.parseInt(dateTokens[2]),
-                Integer.parseInt(timeTokens[0]),
-                Integer.parseInt(timeTokens[1]),
-                Integer.parseInt(timeTokens[2])
+                    Integer.parseInt(dateTokens[0]),
+                    Integer.parseInt(dateTokens[1]),
+                    Integer.parseInt(dateTokens[2]),
+                    Integer.parseInt(timeTokens[0]),
+                    Integer.parseInt(timeTokens[1]),
+                    Integer.parseInt(timeTokens[2])
             );
-             
-              CustomerOrder cOrder = new CustomerOrder(id,custID, 0, orderStatus, cal.getTime());
-              custOrderRepository.save(cOrder);
-              
-              status = "UPDATED";
-              message = "Order has been marked as processed or closed";
+
+            CustomerOrder cOrder = new CustomerOrder(id, custID, 0, orderStatus, cal.getTime());
+            custOrderRepository.save(cOrder);
+
+            status = "UPDATED";
+            message = "Order has been marked as processed or closed";
         }
-        
+
         response.put("message", message);
         response.put("status", status);
 

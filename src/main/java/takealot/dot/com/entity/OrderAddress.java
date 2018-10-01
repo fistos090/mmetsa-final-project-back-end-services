@@ -140,7 +140,7 @@ public class OrderAddress implements Serializable {
 
     @Override
     public String toString() {
-        return "takealot.dot.com.entity.OrderAddress[ id=" + id + " ]";
+        return "OrderAddress{" + "id=" + id + ", orderID=" + orderID + ", houseNumber=" + houseNumber + ", streetName=" + streetName + ", surburb=" + surburb + ", city=" + city + ", postalCode=" + postalCode + ", province=" + province + '}';
     }
 
 }

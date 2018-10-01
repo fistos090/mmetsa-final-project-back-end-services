@@ -5,11 +5,18 @@
  */
 package takealot.dot.com.service;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +27,9 @@ import takealot.dot.com.data.access.manager.OrderAddressRepository;
 import takealot.dot.com.data.access.manager.OrderProductRepository;
 import takealot.dot.com.entity.Administrator;
 import takealot.dot.com.entity.Customer;
+import takealot.dot.com.entity.CustomerOrder;
+import takealot.dot.com.entity.OrderAddress;
+import takealot.dot.com.entity.wrapper.ProductWrapper;
 import takealot.dot.com.restcontroller.CustomerController;
 import takealot.dot.com.service.message.helpers.Email;
 import takealot.dot.com.service.message.helpers.EmailEventEmitter;
@@ -42,6 +52,8 @@ public class CustomerService {
     private CustomerRepository userRepository;
     @Autowired
     private EmailEventEmitter emailEventEmitter;
+    @Autowired
+    private FilePrinterService filePrinterService;
 
     public HashMap registerCustomer(Customer user){
 
@@ -88,10 +100,6 @@ public class CustomerService {
         return response;
     }
 
-//    public List<UserTB> getAllUserByRole(String role) {
-//
-//        return userRepository.findByUserRole(role);
-//    }
     public HashMap login(Customer customer, HttpSession session) {
 
         List<Customer> allUsers = getAllUsers();
@@ -121,11 +129,14 @@ public class CustomerService {
 
                     //AngularJS
                     url = "/";
-                    userIn = arrayUser;
+                    
+                    arrayUser.setLastLoginDate(new Date());
+                    userIn = userRepository.save(arrayUser);
+                    
                     sessionID = session.getId();
 
                     markAsSignedIn(session, email);
-
+                   
                     break;
                 } else {
                     status = "NOT_FOUND";
@@ -322,4 +333,23 @@ public class CustomerService {
         return response;
     }
     
+    public void printCustomerLoginTrackReport(OutputStream stream, String requestData) throws DocumentException, BadElementException, IOException {
+
+        JSONObject jObj = new JSONObject(requestData);
+      
+        Administrator admin = adminRepository.findOne(jObj.getLong("adminID"));
+        
+        if (adminService.adminHasLogin(jObj.getString("sessionID"), admin.getEmail())) {
+            
+            List<Customer> list = new ArrayList<>();
+            userRepository.findAll().forEach(list::add);
+            
+            Document document = filePrinterService.createPdfReport(stream, admin,"Customers login track report");
+                                filePrinterService.printCustomerLoginReport(list);
+            
+            document.close();
+
+        }
+
+    }
 }

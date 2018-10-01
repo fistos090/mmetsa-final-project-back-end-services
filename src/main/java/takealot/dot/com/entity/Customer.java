@@ -6,6 +6,7 @@
 package takealot.dot.com.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "custID",length = 9)
+    @Column(name = "custID", length = 9)
     private Long id;
     @Column(length = 30)
     private String firstname;
@@ -38,7 +39,9 @@ public class Customer implements Serializable {
     private String gender;
     @Column(length = 20)
     private String dateOfBirth;
-    
+
+    private Date lastLoginDate;
+
     @Column(length = 100)
     private String securityQuestuion;
     @Column(length = 100)
@@ -59,6 +62,14 @@ public class Customer implements Serializable {
         this.answer = answer;
     }
 
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
     public String getSecurityQuestuion() {
         return securityQuestuion;
     }
@@ -74,7 +85,7 @@ public class Customer implements Serializable {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
-    
+
     public String getFirstname() {
         return firstname;
     }
@@ -130,8 +141,6 @@ public class Customer implements Serializable {
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-    
-    
 
     public Long getId() {
         return id;
@@ -165,5 +174,5 @@ public class Customer implements Serializable {
     public String toString() {
         return "takealot.dot.com.entity.Customer[ id=" + id + " ]";
     }
-    
+
 }

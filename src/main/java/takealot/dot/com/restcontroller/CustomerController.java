@@ -5,11 +5,14 @@
  */
 package takealot.dot.com.restcontroller;
 
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +111,22 @@ public class CustomerController {
         return response;
     }
     
+    @RequestMapping(method = RequestMethod.POST, value = "/printCustomerLoginTrackReport", produces = "application/pdf")
+    public void printReport(HttpServletResponse response, @RequestBody String requestData){
+        int bufferSize = response.getBufferSize();
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setBufferSize(bufferSize);
+
+        try {
+    
+            service.printCustomerLoginTrackReport(response.getOutputStream(), requestData);
+            
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
     
     
 }

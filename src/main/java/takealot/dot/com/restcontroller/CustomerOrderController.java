@@ -5,11 +5,15 @@
  */
 package takealot.dot.com.restcontroller;
 
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -93,6 +97,29 @@ public class CustomerOrderController {
 
         return response;
     }
+    
+    @RequestMapping(method = RequestMethod.POST, value = "/printCustomerOrderReport", produces = "application/pdf")
+    public void printReport(HttpServletResponse response, @RequestBody String requestData){
+        int bufferSize = response.getBufferSize();
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setBufferSize(bufferSize);
+
+        try {
+        
+            orderService.printCustomerOrderReport(response.getOutputStream(),requestData);
+
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    
+    
+
+    
+    
 //    @RequestMapping(method = RequestMethod.GET, value = "/printInvoice/{sessionID}/{adminID}")
 //    public HashMap printInvoice(@PathVariable("sessionID") String sessionID, @PathVariable("adminID") Long adminID) {
 //
