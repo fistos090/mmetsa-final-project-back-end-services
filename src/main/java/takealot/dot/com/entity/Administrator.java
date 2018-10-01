@@ -56,6 +56,7 @@ public class Administrator implements Serializable {
     public String getFirstname() {
         return firstname;
     }
+    
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;

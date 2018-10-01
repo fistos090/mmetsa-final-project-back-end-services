@@ -77,7 +77,7 @@ public class CustomerService {
 
             String emailBody = "Hi " + user.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
                     + " Your registered email address is <b>" + user.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
-            String subject = "Mmetsa's bakery Registration Confirmation";
+            String subject = "First Enteprise Online Bakery registration confirmation";
 
             Email email = new Email(emailBody,user.getEmail(),subject);
             this.emailEventEmitter.emitEmailEvent(email);

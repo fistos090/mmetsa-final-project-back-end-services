@@ -138,7 +138,7 @@ public class CustomerOrderService {
                     Long OrderNumber = latestOrder.getId();
                     message = "Your order is successfully placed. You will recieve a confirmation email with your order number";
 
-                    String subject = "TAKE-A-LOT ORDER CONFIRMATION";
+                    String subject = "First Enteprise Online Bakery order confirmation";
                     String emailAddress = customerData.getString("email");
 
                     String firstname = customerData.getString("firstname");

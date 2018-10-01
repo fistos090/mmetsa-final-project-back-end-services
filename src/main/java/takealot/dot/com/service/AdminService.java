@@ -75,7 +75,7 @@ public class AdminService {
 
                 String emailBody = "Hi " + admin.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
                         + " Your registered email address is <b>" + admin.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
-                String subject = "Takealot.com Registration Confirmation";
+                String subject = "First Enteprise Online Bakery registration confirmation";
 
                 // emailService.sendEmail(subject, emailBody, admin.getEmail());
                 Email email = new Email(emailBody, admin.getEmail(), subject);
