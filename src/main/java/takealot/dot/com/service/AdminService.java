@@ -97,7 +97,7 @@ public class AdminService {
             url = "/login";
             response.put("status", "CONFLICT");
         }
-        
+
         response.put("loginResponse", loginResponse);
         response.put("message", message);
         response.put("url", url);
@@ -110,7 +110,7 @@ public class AdminService {
         List<Administrator> allUsers = getAllUsers();
 
         String email = admin.getEmail();
-        String password = passwordEncDecManager.encryptPassword(admin.getPassword());
+        String password = admin.getPassword();
 
         String message = "It looks like you don't have an"
                 + " account with us. Please register one first and then you can login";
@@ -128,8 +128,11 @@ public class AdminService {
             Administrator arrayUser = allUsers.get(i);
 
             if (arrayUser.getEmail().equals(email)) {
+                String dencryptPassword = passwordEncDecManager.dencryptPassword(arrayUser.getPassword());
 
-                if (arrayUser.getPassword().equals(password)) {
+                System.out.println("dencryptPassword " + dencryptPassword);
+
+                if (dencryptPassword.equals(password)) {
                     status = "FOUND";
                     message = "You have successfully logged in";
 
@@ -142,7 +145,7 @@ public class AdminService {
 
                     //Attaching admin image to admin logged in 
                     adminWrapper = new AdminWrapper(arrayUser, "ghghg,fddf");
-
+                    System.out.println("adminWrapper " + adminWrapper);
                     //TODO - Check admin stock updates
                     break;
                 } else {
