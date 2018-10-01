@@ -28,11 +28,10 @@ import takealot.dot.com.service.CustomerService;
  *
  * @author Sifiso
  */
-
 @RestController
 @RequestMapping("/BAKERY")
 public class CustomerController {
-    
+
     public static HashMap logonCustomerIds = new HashMap();
     @Autowired
     private CustomerService service;
@@ -41,16 +40,16 @@ public class CustomerController {
     public HashMap registerNewUser(@RequestBody Customer cus, HttpServletRequest request) {
 
         HashMap responseDetails = null;
-//        try {
+        try {
+            //        try {
             responseDetails = service.registerCustomer(cus);
-            
-            if( responseDetails.get("status") == "CREATED" ){  
-                responseDetails.put("auto_logon", signIn(cus, request));
-            }
-            
-//        } catch (MessagingException ex) {
-//            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (responseDetails.get("status") == "CREATED") {
+            responseDetails.put("auto_logon", signIn(cus, request));
+        }
 
         return responseDetails;
     }
@@ -60,8 +59,13 @@ public class CustomerController {
 
         HttpSession session = request.getSession();
 
-        HashMap responseDetails = service.login(cus, session);
-        
+        HashMap responseDetails = null;
+        try {
+            responseDetails = service.login(cus, session);
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return responseDetails;
     }
 
@@ -72,7 +76,7 @@ public class CustomerController {
 
         return response;
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "/getAllRegisteredCustomers/{sessionID}/{userID}")
     public HashMap getAllUsers(@PathVariable("sessionID") String sessionID, @PathVariable("userID") Long userID) {
 
@@ -82,19 +86,19 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/customer/updateProfile/{sessionID}")
-    public HashMap updateProfile(@RequestBody Customer cus,@PathVariable("sessionID") String sessionID) {
+    public HashMap updateProfile(@RequestBody Customer cus, @PathVariable("sessionID") String sessionID) {
 
-      System.out.println(cus);
-        HashMap response = service.updateProfile(cus,sessionID);
+        System.out.println(cus);
+        HashMap response = service.updateProfile(cus, sessionID);
 
         return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/customer/forgot")
     public HashMap retrievePassword(@RequestBody String email) {
-        
+
         HashMap response = service.findCustomer(email);
-       
+
         return response;
     }
 
@@ -110,23 +114,22 @@ public class CustomerController {
 
         return response;
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/printCustomerLoginTrackReport", produces = "application/pdf")
-    public void printReport(HttpServletResponse response, @RequestBody String requestData){
+    public void printReport(HttpServletResponse response, @RequestBody String requestData) {
         int bufferSize = response.getBufferSize();
         response.reset();
         response.setContentType("application/pdf");
         response.setBufferSize(bufferSize);
 
         try {
-    
+
             service.printCustomerLoginTrackReport(response.getOutputStream(), requestData);
-            
+
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    
+
 }

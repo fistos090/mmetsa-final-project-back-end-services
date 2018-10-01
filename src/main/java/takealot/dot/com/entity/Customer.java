@@ -31,7 +31,7 @@ public class Customer implements Serializable {
     private String lastname;
     @Column(length = 40)
     private String email;
-    @Column(length = 50)
+    @Column(length = 70)
     private String password;
     @Column(length = 15)
     private String cellphonNumber;

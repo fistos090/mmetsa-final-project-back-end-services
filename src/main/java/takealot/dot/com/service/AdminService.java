@@ -42,8 +42,10 @@ public class AdminService {
     private ImageManager imageManager;
     @Autowired
     private EmailEventEmitter emailEventEmitter;
+    @Autowired
+    private PasswordEncDecManager passwordEncDecManager;
 
-    public HashMap registerAdmin(AdminWrapper adminWrapper, HttpSession session) throws UnsupportedEncodingException {
+    public HashMap registerAdmin(AdminWrapper adminWrapper, HttpSession session) throws UnsupportedEncodingException, Exception {
 
         Administrator admin = adminWrapper.getAdmin();
         System.out.println(admin);
@@ -65,7 +67,7 @@ public class AdminService {
         }
 
         if (isUnique) {
-
+            admin.setPassword(passwordEncDecManager.encryptPassword(admin.getPassword()));
             Administrator savedAdmin = adminRepository.save(admin);
 
             //On successfully persisted/save
@@ -103,12 +105,12 @@ public class AdminService {
         return response;
     }
 
-    public HashMap login(Administrator admin, HttpSession session) throws UnsupportedEncodingException {
+    public HashMap login(Administrator admin, HttpSession session) throws UnsupportedEncodingException, Exception {
 
         List<Administrator> allUsers = getAllUsers();
 
         String email = admin.getEmail();
-        String password = admin.getPassword();
+        String password = passwordEncDecManager.encryptPassword(admin.getPassword());
 
         String message = "It looks like you don't have an"
                 + " account with us. Please register one first and then you can login";

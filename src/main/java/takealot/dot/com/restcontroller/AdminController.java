@@ -54,7 +54,10 @@ public class AdminController {
             if (this.ssacode.equals(ssacode)) {
                 try {
                     responseDetails = service.registerAdmin(adminWrapper, request.getSession());
+                    
                 } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -75,11 +78,13 @@ public class AdminController {
     public HashMap signIn(@RequestBody Administrator admin, HttpServletRequest request) {
 
         try {
-
+            
             HashMap responseDetails = service.login(admin, request.getSession());
 
             return responseDetails;
         } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

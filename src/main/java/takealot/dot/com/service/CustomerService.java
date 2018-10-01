@@ -54,8 +54,10 @@ public class CustomerService {
     private EmailEventEmitter emailEventEmitter;
     @Autowired
     private FilePrinterService filePrinterService;
+    @Autowired
+    private PasswordEncDecManager passwordEncDecManager;
 
-    public HashMap registerCustomer(Customer user){
+    public HashMap registerCustomer(Customer user) throws Exception{
 
         List<Customer> allUsers = getAllUsers();
 
@@ -73,6 +75,7 @@ public class CustomerService {
         }
 
         if (isUnique) {
+            user.setPassword(passwordEncDecManager.encryptPassword(user.getPassword()));
             userRepository.save(user);
 
             String emailBody = "Hi " + user.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
@@ -100,12 +103,12 @@ public class CustomerService {
         return response;
     }
 
-    public HashMap login(Customer customer, HttpSession session) {
+    public HashMap login(Customer customer, HttpSession session) throws Exception {
 
         List<Customer> allUsers = getAllUsers();
 
         String email = customer.getEmail();
-        String password = customer.getPassword();
+        String password = passwordEncDecManager.encryptPassword(customer.getPassword());
 
         String message = "Please register first";
 
