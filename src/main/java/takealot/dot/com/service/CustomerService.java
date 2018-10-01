@@ -108,7 +108,7 @@ public class CustomerService {
         List<Customer> allUsers = getAllUsers();
 
         String email = customer.getEmail();
-        String password = passwordEncDecManager.encryptPassword(customer.getPassword());
+        String password = customer.getPassword();
 
         String message = "Please register first";
 
@@ -125,8 +125,8 @@ public class CustomerService {
             Customer arrayUser = allUsers.get(i);
             
             if (arrayUser.getEmail().equals(email)) {
-
-                if (arrayUser.getPassword().equals(password)) {
+                String dencryptPassword = passwordEncDecManager.dencryptPassword(arrayUser.getPassword());
+                if (dencryptPassword.equals(password)) {
                     status = "FOUND";
                     message = "You have successfully logged in";
 
