@@ -67,14 +67,17 @@ public class AdminService {
         }
 
         if (isUnique) {
+//            String tempPassword = admin.getPassword();
+
             admin.setPassword(passwordEncDecManager.encryptPassword(admin.getPassword()));
             Administrator savedAdmin = adminRepository.save(admin);
 
             //On successfully persisted/save
             if (savedAdmin.getId() != null) {
 
-                loginResponse = login(admin, session);
+                admin.setPassword(passwordEncDecManager.dencryptPassword(savedAdmin.getPassword()));
 
+//              loginResponse = login(savedAdmin, session);
                 String emailBody = "Hi " + admin.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
                         + " Your registered email address is <b>" + admin.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
                 String subject = "First Enteprise Online Bakery registration confirmation";
@@ -98,22 +101,23 @@ public class AdminService {
             response.put("status", "CONFLICT");
         }
 
-        response.put("loginResponse", loginResponse);
         response.put("message", message);
         response.put("url", url);
 
         return response;
     }
 
-    public HashMap login(Administrator admin, HttpSession session) throws UnsupportedEncodingException, Exception {
+    public HashMap login(Administrator admin, HttpSession session,String loginFrom) throws UnsupportedEncodingException, Exception {
 
-        List<Administrator> allUsers = getAllUsers();
-
+//        List<Administrator> allUsers = getAllUsers();
         String email = admin.getEmail();
         String password = admin.getPassword();
+        
+        if(loginFrom.equals("login")){
+            password = passwordEncDecManager.encryptPassword(password);
+        }
 
-        String message = "It looks like you don't have an"
-                + " account with us. Please register one first and then you can login";
+        String message = "It looks like you don't have an account with us. Please register one first and then you can login";
 
         //AngularJS
         String url = "/login";
@@ -124,39 +128,28 @@ public class AdminService {
 
         HashMap response = new HashMap();
 
-        for (int i = 0; i < allUsers.size(); i++) {
-            Administrator arrayUser = allUsers.get(i);
+        Administrator findByAdmin = adminRepository.findByEmail(email);
 
-            if (arrayUser.getEmail().equals(email)) {
-                String dencryptPassword = passwordEncDecManager.dencryptPassword(arrayUser.getPassword());
+        if (findByAdmin != null) {
 
-                System.out.println("dencryptPassword " + dencryptPassword);
+            if (findByAdmin.getPassword().equals(password)) {
+                status = "FOUND";
+                message = "You have successfully logged in";
 
-                if (dencryptPassword.equals(password)) {
-                    status = "FOUND";
-                    message = "You have successfully logged in";
+                //AngularJS
+                url = "/";
 
-                    //AngularJS
-                    url = "/";
+                sessionID = session.getId();
 
-                    sessionID = session.getId();
+                markAsSignedIn(session, email);
 
-                    markAsSignedIn(session, email);
+                //Attaching admin image to admin logged in 
+                adminWrapper = new AdminWrapper(findByAdmin, "ghghg,fddf");
 
-                    //Attaching admin image to admin logged in 
-                    adminWrapper = new AdminWrapper(arrayUser, "ghghg,fddf");
-                    System.out.println("adminWrapper " + adminWrapper);
-                    //TODO - Check admin stock updates
-                    break;
-                } else {
-                    status = "NOT_FOUND";
-                    message = "Enter the correct password";
-                }
-                //break to outside of the loop if the email exist
-                i = allUsers.size() + 1;
+                //TODO - Check admin stock updates
             } else {
-
-                message = "Email address entered doesn't exist, Please enter the correct one.";
+                status = "NOT_FOUND";
+                message = "Email and password doesn't match";
             }
 
         }

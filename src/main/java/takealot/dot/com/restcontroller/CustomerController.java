@@ -43,12 +43,13 @@ public class CustomerController {
         try {
             //        try {
             responseDetails = service.registerCustomer(cus);
+
+            if (responseDetails.get("status").equals("CREATED")) {
+                responseDetails.put("auto_logon",service.login(cus, request.getSession(),"register"));
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (responseDetails.get("status") == "CREATED") {
-            responseDetails.put("auto_logon", signIn(cus, request));
         }
 
         return responseDetails;
@@ -61,7 +62,7 @@ public class CustomerController {
 
         HashMap responseDetails = null;
         try {
-            responseDetails = service.login(cus, session);
+            responseDetails = service.login(cus, session,"login");
         } catch (Exception ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }

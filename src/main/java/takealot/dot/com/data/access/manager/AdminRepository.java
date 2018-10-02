@@ -13,5 +13,5 @@ import takealot.dot.com.entity.Administrator;
  * @author Sifiso
  */
 public interface AdminRepository extends CrudRepository<Administrator, Long>{
-    
+    public Administrator findByEmail(String email);
 }

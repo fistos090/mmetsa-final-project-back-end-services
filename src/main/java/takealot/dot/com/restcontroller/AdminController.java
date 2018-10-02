@@ -53,13 +53,26 @@ public class AdminController {
         if (ssacode != null) {
             if (this.ssacode.equals(ssacode)) {
                 try {
+                    
                     responseDetails = service.registerAdmin(adminWrapper, request.getSession());
                     
+                    System.out.println("wwwwwwww yes "+adminWrapper.getAdmin());
+                    
+                    if (responseDetails.get("status").equals("CREATED")) {
+                        
+                        System.out.println("wwwwwwwwqqqqqqq qqqqqq");
+                        HashMap loginResponse = service.login(adminWrapper.getAdmin(), request.getSession(),"register");
+                    
+                        responseDetails.put("loginResponse", loginResponse);
+                    }
+
+                
                 } catch (UnsupportedEncodingException ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
             } else {
                 responseDetails = new HashMap();
                 responseDetails.put("status", "FAILED");
@@ -79,7 +92,7 @@ public class AdminController {
 
         try {
             
-            HashMap responseDetails = service.login(admin, request.getSession());
+            HashMap responseDetails = service.login(admin, request.getSession(),"login");
 
             return responseDetails;
         } catch (UnsupportedEncodingException ex) {

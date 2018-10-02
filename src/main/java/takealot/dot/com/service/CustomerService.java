@@ -38,9 +38,7 @@ import takealot.dot.com.service.message.helpers.EmailEventEmitter;
  *
  * @author Sifiso
  */
-
 //TODO Centralizaion of methods/function that are common in CustomerService and this(AdminService) service 
-   
 @Service
 public class CustomerService {
 
@@ -57,7 +55,7 @@ public class CustomerService {
     @Autowired
     private PasswordEncDecManager passwordEncDecManager;
 
-    public HashMap registerCustomer(Customer user) throws Exception{
+    public HashMap registerCustomer(Customer user) throws Exception {
 
         List<Customer> allUsers = getAllUsers();
 
@@ -75,14 +73,15 @@ public class CustomerService {
         }
 
         if (isUnique) {
+          
             user.setPassword(passwordEncDecManager.encryptPassword(user.getPassword()));
             userRepository.save(user);
 
-            String emailBody = "Hi " + user.getFirstname() + "<br/></br> Thank you for creating an account on takealot.com."
-                    + " Your registered email address is <b>" + user.getEmail() + ". </b><br><br>Once again Thank you for using Takealot.com Online Store.";
+            String emailBody = "Hi " + user.getFirstname() + "<br/></br> Thank you for creating an account on First Enteprise Online Bakery."
+                    + " Your registered email address is <b>" + user.getEmail() + ". </b><br><br>Once again Thank you for using First Enteprise Online Bakery Online Store.";
             String subject = "First Enteprise Online Bakery registration confirmation";
 
-            Email email = new Email(emailBody,user.getEmail(),subject);
+            Email email = new Email(emailBody, user.getEmail(), subject);
             this.emailEventEmitter.emitEmailEvent(email);
 
             message = "You are successfully registered. Check your email account for confirmation email";
@@ -103,12 +102,14 @@ public class CustomerService {
         return response;
     }
 
-    public HashMap login(Customer customer, HttpSession session) throws Exception {
-
-        List<Customer> allUsers = getAllUsers();
+    public HashMap login(Customer customer, HttpSession session, String loginFrom) throws Exception {
 
         String email = customer.getEmail();
         String password = customer.getPassword();
+        
+        if(loginFrom.equals("login")){
+            password = passwordEncDecManager.encryptPassword(password);
+        }
 
         String message = "Please register first";
 
@@ -121,37 +122,32 @@ public class CustomerService {
 
         HashMap response = new HashMap();
 
-        for (int i = 0; i < allUsers.size(); i++) {
-            Customer arrayUser = allUsers.get(i);
+        Customer findByCustomer = userRepository.findByEmail(email);
+
+        if (findByCustomer != null) {
             
-            if (arrayUser.getEmail().equals(email)) {
-                String dencryptPassword = passwordEncDecManager.dencryptPassword(arrayUser.getPassword());
-                if (dencryptPassword.equals(password)) {
-                    status = "FOUND";
-                    message = "You have successfully logged in";
+            if (findByCustomer.getPassword().equals(password)) {
+                status = "FOUND";
+                message = "You have successfully logged in";
 
-                    //AngularJS
-                    url = "/";
-                    
-                    arrayUser.setLastLoginDate(new Date());
-                    userIn = userRepository.save(arrayUser);
-                    
-                    sessionID = session.getId();
+                //AngularJS
+                url = "/";
 
-                    markAsSignedIn(session, email);
-                   
-                    break;
-                } else {
-                    status = "NOT_FOUND";
-                    message = "Email and Password entered doesn't match";
-                }
-                //break to outside of the loop if the email exist
-                i = allUsers.size() + 1;
+                findByCustomer.setLastLoginDate(new Date());
+                userIn = userRepository.save(findByCustomer);
+
+                sessionID = session.getId();
+
+                markAsSignedIn(session, email);
+
             } else {
                 status = "NOT_FOUND";
                 message = "Email and Password entered doesn't match";
             }
 
+        } else {
+            status = "NOT_FOUND";
+            message = "Email and Password entered doesn't match";
         }
 
         response.put("status", status);
@@ -237,7 +233,7 @@ public class CustomerService {
             String emailBody = "Hi " + customer.getFirstname() + "Your Password is: <b>" + customer.getPassword() + "</b><br><br>Thank you for using Takealot.com Online Store.";
             String subject = "Email Recovery";
 
-            Email email = new Email(emailBody,emailAdddress,subject);
+            Email email = new Email(emailBody, emailAdddress, subject);
             this.emailEventEmitter.emitEmailEvent(email);
 
             status = "OK";
@@ -276,7 +272,7 @@ public class CustomerService {
             String status = "FAILED";
             String message = "We are strangling to log you out. Please try again";
             boolean logoutStatus = markAsSignedOut(customer.getEmail());
-            
+
             if (logoutStatus) {
                 status = "OK";
                 message = "Log out successfully";
@@ -313,43 +309,43 @@ public class CustomerService {
     }
 
     private boolean markAsSignedOut(String email) {
-        
-        return  CustomerController.logonCustomerIds.remove(email) != null;
+
+        return CustomerController.logonCustomerIds.remove(email) != null;
     }
 
     public HashMap getAllRegisteredCustomers(String sessionID, Long userID) {
-         HashMap response = new HashMap();
-          
+        HashMap response = new HashMap();
+
         String status = "FAILED";
         String message = "Please login to perform action.";
-        
+
         Administrator admin = adminRepository.findOne(userID);
         if (adminService.adminHasLogin(sessionID, admin.getEmail())) {
             status = "FETCHED";
             message = "List of registered customers if successfully fetched";
             response.put("customers", getAllUsers());
         }
-            
+
         response.put("message", message);
         response.put("status", status);
-        
+
         return response;
     }
-    
+
     public void printCustomerLoginTrackReport(OutputStream stream, String requestData) throws DocumentException, BadElementException, IOException {
 
         JSONObject jObj = new JSONObject(requestData);
-      
+
         Administrator admin = adminRepository.findOne(jObj.getLong("adminID"));
-        
+
         if (adminService.adminHasLogin(jObj.getString("sessionID"), admin.getEmail())) {
-            
+
             List<Customer> list = new ArrayList<>();
             userRepository.findAll().forEach(list::add);
-            
-            Document document = filePrinterService.createPdfReport(stream, admin,"Customers login track report");
-                                filePrinterService.printCustomerLoginReport(list);
-            
+
+            Document document = filePrinterService.createPdfReport(stream, admin, "Customers login track report");
+            filePrinterService.printCustomerLoginReport(list);
+
             document.close();
 
         }
